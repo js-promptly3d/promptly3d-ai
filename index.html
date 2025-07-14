@@ -30,6 +30,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
     <header>
         <div class="container">
             <a href="#" class="logo-wrapper" aria-label="Return to top">
@@ -49,14 +52,40 @@
     <main>
         <section id="hero" class="hero">
             <div class="container">
-                <div class="hero-content">
-                    <h2 class="hero-title">Transform Ideas Into Reality</h2>
-                    <p class="hero-subtitle">Meet the world's first pure AI-powered 3D design platform that creates engineering-ready parts from natural language. No CAD software, no complex tools - just describe what you need and our AI generates professional-grade 3D models instantly.</p>
+                <div class="hero-wrapper">
+                    <div class="hero-left">
+                        <div class="hero-content">
+                            <h2 class="hero-title">Transform Ideas Into Reality</h2>
+                            <p class="hero-subtitle">From concept to creation in minutes. Describe your vision, and we'll turn it into precision-engineered 3D models ready for manufacturing.</p>
+                        </div>
+                    </div>
+                    <div class="hero-form-container">
+                        <form id="hero-form" class="contact-form" action="https://formspree.io/f/{your_form_id}" method="POST">
+                            <div class="form-row">
+                                <select name="user_type" id="user_type_select">
+                                    <option value="user">I'm a User</option>
+                                    <option value="vendor">I'm a Vendor</option>
+                                    <option value="developer">I'm a Developer</option>
+                                    <option value="investor">I'm an Investor</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <input type="text" name="name" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-row">
+                                <input type="email" name="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-row">
+                                <textarea name="message" rows="4" placeholder="What's your next great idea?" required></textarea>
+                            </div>
+                            <button type="submit" class="cta-button">Get Started</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="process" class="process-section">
+        <section id="process" class="process-section content-section">
             <div class="container">
                 <h2 class="section-title">How It Works</h2>
                 <div class="process-flow">
@@ -164,7 +193,7 @@
             </div>
         </section>
 
-        <section id="compare" class="comparison-section">
+        <section id="compare" class="comparison-section content-section">
             <div class="container">
                 <h2 class="section-title">How Promptly3D Compares</h2>
                 <div class="comparison-grid">
@@ -228,65 +257,10 @@
             </div>
         </section>
 
-        <section id="contact" class="contact-section">
+        <section id="contact" class="contact-section content-section">
             <div class="container">
                 <h2 class="section-title">Get Involved</h2>
                 <p class="section-subtitle">Connect with us, whether you're a user with a brilliant idea, a vendor who wants to partner, or a developer looking to contribute.</p>
-                <div class="form-container">
-                    <div class="form-section">
-                        <div class="form-header">
-                            <h3>For Users</h3>
-                            <p>Share your next great idea</p>
-                        </div>
-                        <form class="contact-form" data-form="users">
-                            <input type="text" name="name" placeholder="Your Name" required>
-                            <input type="email" name="email" placeholder="Your Email" required>
-                            <textarea name="message" placeholder="What's your next great idea?" required></textarea>
-                            <input type="text" name="_gotcha" style="display:none" tabindex="-1">
-                            <button type="submit" class="form-btn glow-btn">
-                                <span class="btn-text">Submit Form</span>
-                                <div class="btn-glow"></div>
-                                <div class="loading-spinner"></div>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-header">
-                            <h3>For Vendors</h3>
-                            <p>Partner with us</p>
-                        </div>
-                        <form class="contact-form" data-form="vendors">
-                            <input type="text" name="name" placeholder="Company Name" required>
-                            <input type="email" name="email" placeholder="Work Email" required>
-                            <textarea name="message" placeholder="Outline your skills, machinery, and material capabilities:" required></textarea>
-                            <input type="text" name="_gotcha" style="display:none" tabindex="-1">
-                            <button type="submit" class="form-btn glow-btn">
-                                <span class="btn-text">Submit Form</span>
-                                <div class="btn-glow"></div>
-                                <div class="loading-spinner"></div>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-header">
-                            <h3>For Developers</h3>
-                            <p>Contribute to the future</p>
-                        </div>
-                        <form class="contact-form" data-form="developers">
-                            <input type="text" name="name" placeholder="Your Name / GitHub" required>
-                            <input type="email" name="email" placeholder="Your Email" required>
-                            <textarea name="message" placeholder="Tell us about your experience or interest in the project:" required></textarea>
-                            <input type="text" name="_gotcha" style="display:none" tabindex="-1">
-                            <button type="submit" class="form-btn glow-btn">
-                                <span class="btn-text">Submit Form</span>
-                                <div class="btn-glow"></div>
-                                <div class="loading-spinner"></div>
-                            </button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </section>
     </main>

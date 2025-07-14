@@ -6,7 +6,8 @@ class Promptly3DApp {
         this.formEndpoints = {
             users: 'https://formspree.io/f/xldnqnbo',
             vendors: 'https://formspree.io/f/xyzjrjwl',
-            developers: 'https://formspree.io/f/xzzgngro'
+            developers: 'https://formspree.io/f/xzzgngro',
+            investors: 'https://formspree.io/f/xinvestor' // Add investor endpoint
         };
         
         this.init();
@@ -148,37 +149,7 @@ class Promptly3DApp {
     }
     
     initializeAnimations() {
-        // Check if device is mobile
-        const isMobile = window.innerWidth <= 768;
-        
-        if (!isMobile) {
-            // Intersection Observer for scroll animations (desktop only)
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px 0px -100px 0px',
-                threshold: 0.1
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-in');
-                        
-                        // Special handling for process steps
-                        if (entry.target.classList.contains('process-step')) {
-                            setTimeout(() => {
-                                entry.target.classList.add('glow-active');
-                            }, 500);
-                        }
-                    }
-                });
-            }, observerOptions);
-            
-            // Observe elements for animation (desktop only)
-            document.querySelectorAll('.process-step, .comparison-card, .form-section').forEach(el => {
-                observer.observe(el);
-            });
-        }
+        // Static sections - no animations
     }
     
     setupFormHandlers() {
@@ -562,6 +533,8 @@ function addDynamicStyles() {
                 transform: scale(1.05);
             }
         }
+        
+
     `;
     document.head.appendChild(style);
 }
@@ -581,6 +554,55 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Page loaded in ${loadTime}ms`);
         });
     }
+
+    // Left side is now blank - ready for fresh content
+    
+
+
+
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Simple scroll trigger to add visibility class
+    gsap.utils.toArray('.content-section').forEach((section, i) => {
+        ScrollTrigger.create({
+            trigger: section,
+            start: 'top 80%',
+            onEnter: () => section.classList.add('is-visible'),
+            once: true
+        });
+    });
+
+    // Dynamic form placeholder
+    const userTypeSelect = document.getElementById('user_type_select');
+    const messageTextarea = document.querySelector('#hero-form textarea[name="message"]');
+    const nameInput = document.querySelector('#hero-form input[name="name"]');
+
+    const placeholders = {
+        user: {
+            name: "Your Name",
+            message: "What's your next great idea?"
+        },
+        vendor: {
+            name: "Company Name",
+            message: "Outline your skills, machinery, and material capabilities:"
+        },
+        developer: {
+            name: "Your Name / GitHub",
+            message: "Tell us about your experience or interest in the project:"
+        },
+        investor: {
+            name: "Your Name / Company",
+            message: "Tell us about your investment interests and goals:"
+        }
+    };
+
+    userTypeSelect.addEventListener('change', (e) => {
+        const userType = e.target.value;
+        messageTextarea.placeholder = placeholders[userType].message;
+        nameInput.placeholder = placeholders[userType].name;
+    });
 });
 
 // Export for potential module use

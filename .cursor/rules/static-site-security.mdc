@@ -1,0 +1,43 @@
+# Security Best Practices for Static Sites
+
+## Content Security Policy (CSP)
+- Set a strict CSP header to prevent XSS and data injection attacks.
+- Only allow scripts, styles, and resources from trusted domains.
+- Example header:
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none';
+
+## XSS Prevention
+- Never inject untrusted data into the DOM without sanitization.
+- Use DOMPurify or similar libraries if dynamic HTML is required.
+- Avoid using `innerHTML` unless absolutely necessary.
+
+## HTTPS Enforcement
+- Always serve your site over HTTPS.
+- Redirect all HTTP traffic to HTTPS (Cloudflare can enforce this).
+
+## Secure Headers
+- Set security headers: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security.
+- Example:
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+## Input Validation
+- Validate and sanitize all user input, even on static sites (e.g., forms).
+- Use HTML5 validation attributes and serverless function validation if applicable.
+
+## Third-Party Scripts
+- Only include trusted third-party scripts.
+- Use Subresource Integrity (SRI) for CDN scripts.
+- Regularly audit dependencies for vulnerabilities.
+
+## Miscellaneous
+- Disable directory listing on your web server.
+- Remove unused files and sensitive data before deployment.
+- Monitor for unexpected changes or file uploads.
+
+## References
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+- https://owasp.org/www-project-secure-headers/
+- https://securityheaders.com/
