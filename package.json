@@ -1,0 +1,35 @@
+{
+  "name": "promptly3d",
+  "version": "1.0.0",
+  "description": "Interactive 3D design platform that transforms ideas into manufacturable 3D designs using natural language",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "build": "echo 'Static site - no build step required'",
+    "start": "npx serve . -p 3000",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel"
+  },
+  "keywords": [
+    "3d",
+    "design",
+    "ai",
+    "cad",
+    "manufacturing",
+    "threejs",
+    "webgl"
+  ],
+  "author": "Promptly3D",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/promptly3d.ai.git"
+  },
+  "homepage": "https://promptly3d.ai",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 
