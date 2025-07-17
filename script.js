@@ -1,3 +1,18 @@
+// Debug logging for production
+console.log('Script.js loaded');
+console.log('THREE available:', typeof THREE !== 'undefined');
+console.log('GSAP available:', typeof gsap !== 'undefined');
+
+// Check if required libraries are loaded
+if (typeof THREE === 'undefined') {
+    console.error('Three.js failed to load!');
+    document.body.innerHTML += '<div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 20px; border-radius: 5px; z-index: 9999;">Error: Three.js library failed to load. Please refresh the page.</div>';
+}
+
+if (typeof gsap === 'undefined') {
+    console.error('GSAP failed to load!');
+}
+
 // Enhanced Promptly3D Interactive Website Script
 // Formspree Integration with Interactive Features
 
@@ -872,11 +887,50 @@ class Promptly3DApp {
     }
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    addDynamicStyles(); // If still needed
-    const app = new Promptly3DApp();
-    app.updateFormPlaceholders(); // Add this call
+// Initialize the app with proper loading checks
+function initializeApp() {
+    console.log('Initializing Promptly3D App...');
+    
+    // Double-check libraries are available
+    if (typeof THREE === 'undefined') {
+        console.error('Cannot initialize: Three.js is not available');
+        return;
+    }
+    
+    if (typeof gsap === 'undefined') {
+        console.error('Cannot initialize: GSAP is not available');
+        return;
+    }
+    
+    try {
+        addDynamicStyles(); // If still needed
+        const app = new Promptly3DApp();
+        app.updateFormPlaceholders(); // Add this call
+        console.log('Promptly3D App initialized successfully');
+    } catch (error) {
+        console.error('Error initializing Promptly3D App:', error);
+        document.body.innerHTML += '<div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 20px; border-radius: 5px; z-index: 9999;">Error initializing 3D viewer. Please check console for details.</div>';
+    }
+}
+
+// Wait for both DOMContentLoaded and window.load to ensure all scripts are loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Additional wait for scripts to fully initialize
+        if (window.THREE && window.gsap) {
+            initializeApp();
+        } else {
+            window.addEventListener('load', initializeApp);
+        }
+    });
+} else {
+    // DOM already loaded
+    if (window.THREE && window.gsap) {
+        initializeApp();
+    } else {
+        window.addEventListener('load', initializeApp);
+    }
+}
     
     // Add loading complete class to body
     document.body.classList.add('loaded');
@@ -907,9 +961,6 @@ document.addEventListener('DOMContentLoaded', () => {
             once: true
         });
     });
-
-
-});
 
 // Export for potential module use
 if (typeof module !== 'undefined' && module.exports) {
