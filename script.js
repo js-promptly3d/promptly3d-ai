@@ -582,65 +582,57 @@ class Promptly3DApp {
         if (this.model) {
             this.scene.remove(this.model);
         }
-        // Create an impressive polished torus-knot as the hero demo
-        this.createShowpieceTorusKnot();
+        // Create an impressive realistic gear as the hero demo
+        this.createShowpieceRealisticGear();
         this.createFeaturePreviews();
     }
 
-    createShowpieceTorusKnot() {
+    createShowpieceRealisticGear() {
         this.model = new THREE.Group();
 
-        // Self-contained environment map using data URIs to avoid external requests
-        const px = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg=='; // a light color
-        const nx = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
-        const py = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
-        const ny = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
-        const pz = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
-        const nz = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
-
-        const envMap = new THREE.CubeTextureLoader().load([px, nx, py, ny, pz, nz]);
-        this.scene.environment = envMap;
-
-        // Torus-knot geometry
-        const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 200, 32);
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x8B5CF6, // Using brand purple
-            metalness: 0.9,
-            roughness: 0.1,
-            envMapIntensity: 1.5
+        // Material for the gear - solid dark purple as requested
+        const gearMaterial = new THREE.MeshStandardMaterial({
+            color: 0x4C1D95, // Dark purple color
+            metalness: 0.8,
+            roughness: 0.2,
+            envMapIntensity: 0.5
         });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        this.model.add(mesh);
+
+        // Create all gear components
+        this.createRealisticGearBody(gearMaterial);
+        this.createRealisticGearTeeth(gearMaterial);
+        this.createRealisticHub(gearMaterial);
+        this.createRealisticMountingHoles(gearMaterial);
 
         // Base shadow plane for contact shadow
-        const planeGeo = new THREE.CircleGeometry(5, 64);
-        const planeMat = new THREE.ShadowMaterial({ opacity: 0.2 });
+        const planeGeo = new THREE.CircleGeometry(3, 64);
+        const planeMat = new THREE.ShadowMaterial({ opacity: 0.3 });
         const plane = new THREE.Mesh(planeGeo, planeMat);
         plane.rotation.x = -Math.PI / 2;
-        plane.position.y = -1.6;
+        plane.position.y = -0.5;
         plane.receiveShadow = true;
         this.scene.add(plane);
 
-        // Lights
-        const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-        keyLight.position.set(5, 5, 5);
+        // Professional lighting setup
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        keyLight.position.set(4, 6, 4);
         keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
         this.scene.add(keyLight);
 
-        const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
-        fillLight.position.set(-5, 2, 5);
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+        fillLight.position.set(-4, 2, 4);
         this.scene.add(fillLight);
 
-        const backLight = new THREE.DirectionalLight(0xffffff, 0.7);
-        backLight.position.set(0, 5, -5);
-        this.scene.add(backLight);
+        const rimLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        rimLight.position.set(0, 4, -4);
+        this.scene.add(rimLight);
 
         this.scene.add(this.model);
 
-        // Auto-rotation speed
-        this.autoRotateSpeed = 0.005;
+        // Slow, professional rotation
+        this.autoRotateSpeed = 0.003;
     }
     
     createRealisticGearBody(material) {
