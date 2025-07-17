@@ -13,6 +13,12 @@ if (typeof gsap === 'undefined') {
     console.error('GSAP failed to load!');
 }
 
+// Check for Three.js examples classes
+if (typeof THREE !== 'undefined') {
+    console.log('OrbitControls available:', typeof OrbitControls !== 'undefined');
+    console.log('GLTFLoader available:', typeof GLTFLoader !== 'undefined');
+}
+
 // Enhanced Promptly3D Interactive Website Script
 // Formspree Integration with Interactive Features
 
@@ -62,7 +68,8 @@ class Promptly3DApp {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(this.renderer.domElement);
 
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        // OrbitControls is in the global scope from the examples script
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
         this.controls.screenSpacePanning = false;
@@ -80,8 +87,8 @@ class Promptly3DApp {
         this.scene.add(directionalLight);
 
         // Try to load a model, but create fallback if it fails
-        if (typeof THREE.GLTFLoader !== 'undefined') {
-            const loader = new THREE.GLTFLoader();
+        if (typeof GLTFLoader !== 'undefined') {
+            const loader = new GLTFLoader();
             loader.load('models/example.glb', 
                 (gltf) => {
                     this.model = gltf.scene;
