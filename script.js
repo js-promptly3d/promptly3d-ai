@@ -55,72 +55,130 @@ class Promptly3DApp {
         const container = document.getElementById('three-d-canvas');
         if (!container) return;
         
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xf5f5fb);
-
-        this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        this.camera.position.set(0, 1, 5);
-
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.renderer.setSize(container.clientWidth, container.clientHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(this.renderer.domElement);
-
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.05;
-        this.controls.screenSpacePanning = false;
-        this.controls.minDistance = 1;
-        this.controls.maxDistance = 10;
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        this.scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 5, 5);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 1024;
-        directionalLight.shadow.mapSize.height = 1024;
-        this.scene.add(directionalLight);
-
-        // Try to load a model, but create fallback if it fails
-        if (typeof THREE.GLTFLoader !== 'undefined') {
-            const loader = new THREE.GLTFLoader();
-            loader.load('models/example.glb', 
-                (gltf) => {
-                    this.model = gltf.scene;
-                    this.model.scale.set(1, 1, 1);
-                    this.model.position.set(0, 0, 0);
-                    this.model.castShadow = true;
-                    this.model.receiveShadow = true;
-                    this.scene.add(this.model);
-
-                    if (gltf.animations && gltf.animations.length) {
-                        this.animationMixer = new THREE.AnimationMixer(this.model);
-                        const action = this.animationMixer.clipAction(gltf.animations[0]);
-                        action.play();
-                    }
-                },
-                undefined,
-                (error) => {
-                    console.log('GLB model not found, creating fallback 3D object');
-                    this.createFallback3DModel();
-                }
-            );
-        } else {
-            this.createFallback3DModel();
+        // Check if Three.js loaded properly
+        if (typeof THREE === 'undefined' || typeof THREE.OrbitControls === 'undefined') {
+            console.error('Three.js or OrbitControls not loaded, showing fallback');
+            this.showFallbackCanvas(container);
+            return;
         }
         
-        this.setupViewerControls();
+        try {
+            this.scene = new THREE.Scene();
+            this.scene.background = new THREE.Color(0xf5f5fb);
 
-        window.addEventListener('resize', this.onWindowResize.bind(this));
+            this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            this.camera.position.set(0, 1, 5);
 
-        this.animate();
+            this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            this.renderer.setSize(container.clientWidth, container.clientHeight);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            container.appendChild(this.renderer.domElement);
+
+            this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+            this.controls.enableDamping = true;
+            this.controls.dampingFactor = 0.05;
+            this.controls.screenSpacePanning = false;
+            this.controls.minDistance = 1;
+            this.controls.maxDistance = 10;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            this.scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 5, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 1024;
+            directionalLight.shadow.mapSize.height = 1024;
+            this.scene.add(directionalLight);
+
+            // Try to load a model, but create fallback if it fails
+            if (typeof THREE.GLTFLoader !== 'undefined') {
+                const loader = new THREE.GLTFLoader();
+                loader.load('models/example.glb', 
+                    (gltf) => {
+                        this.model = gltf.scene;
+                        this.model.scale.set(1, 1, 1);
+                        this.model.position.set(0, 0, 0);
+                        this.model.castShadow = true;
+                        this.model.receiveShadow = true;
+                        this.scene.add(this.model);
+
+                        if (gltf.animations && gltf.animations.length) {
+                            this.animationMixer = new THREE.AnimationMixer(this.model);
+                            const action = this.animationMixer.clipAction(gltf.animations[0]);
+                            action.play();
+                        }
+                    },
+                    undefined,
+                    () => {
+                        // Model failed to load, create fallback
+                        this.createFallback3DModel();
+                    }
+                );
+            } else {
+                // GLTFLoader not available, create fallback
+                this.createFallback3DModel();
+            }
+
+            // Setup viewer controls
+            this.setupViewerControls();
+            
+            // Add resize handler
+            window.addEventListener('resize', this.handleResize.bind(this));
+
+            // Start animation loop
+            this.animate();
+        } catch (error) {
+            console.error('Error initializing 3D viewer:', error);
+            this.showFallbackCanvas(container);
+        }
     }
 
-    onWindowResize() {
+    showFallbackCanvas(container) {
+        // Create a simple CSS animated element as fallback
+        container.innerHTML = `
+            <div style="
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 20px;
+                position: relative;
+                overflow: hidden;
+            ">
+                <div style="
+                    width: 150px;
+                    height: 150px;
+                    border: 3px solid rgba(255,255,255,0.3);
+                    border-radius: 50%;
+                    animation: rotate 4s linear infinite;
+                    position: relative;
+                ">
+                    <div style="
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 48px;
+                        color: white;
+                        font-weight: bold;
+                    ">3D</div>
+                </div>
+                <style>
+                    @keyframes rotate {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                </style>
+            </div>
+        `;
+    }
+
+    handleResize() {
         const container = document.getElementById('three-d-canvas');
         if (!container) return;
 
