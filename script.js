@@ -569,22 +569,24 @@ class Promptly3DApp {
     createShowpieceTorusKnot() {
         this.model = new THREE.Group();
 
-        // Environment texture (small preset from Three.js examples)
-        const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-        const envTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/venice_sunset_1k.hdr', (texture) => {
-            const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-            this.scene.environment = envMap;
-            texture.dispose();
-            pmremGenerator.dispose();
-        });
+        // Self-contained environment map using data URIs to avoid external requests
+        const px = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg=='; // a light color
+        const nx = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
+        const py = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
+        const ny = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
+        const pz = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
+        const nz = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hAgAGgwJ/3f2UUAAAAABJRU5ErkJggg==';
+
+        const envMap = new THREE.CubeTextureLoader().load([px, nx, py, ny, pz, nz]);
+        this.scene.environment = envMap;
 
         // Torus-knot geometry
         const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 200, 32);
         const material = new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            metalness: 1,
-            roughness: 0.15,
-            envMapIntensity: 1.2
+            color: 0x8B5CF6, // Using brand purple
+            metalness: 0.9,
+            roughness: 0.1,
+            envMapIntensity: 1.5
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.castShadow = true;
