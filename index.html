@@ -421,11 +421,23 @@
     </footer>
 
     <!-- Scripts loaded last for proper initialization -->
-    <!-- Use Three.js r128 which has the examples in the expected location -->
+    <!-- Use Three.js r128 with multiple CDN fallbacks -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Make THREE global for the examples scripts
-        window.THREE = THREE;
+        // Fallback to unpkg if cdnjs fails
+        if (typeof THREE === 'undefined') {
+            console.log('Primary CDN failed, trying fallback...');
+            document.write('<script src="https://unpkg.com/three@0.128.0/build/three.min.js"><\/script>');
+        }
+    </script>
+    <script>
+        // Make THREE global for the examples scripts and add error handling
+        if (typeof THREE !== 'undefined') {
+            window.THREE = THREE;
+            console.log('Three.js loaded successfully');
+        } else {
+            console.error('Three.js failed to load from all CDNs');
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
