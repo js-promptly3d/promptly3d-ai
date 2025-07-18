@@ -30,9 +30,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Skip to content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <!-- Pre-launch Banner -->
     <div class="pre-launch-banner">
-        <p>This is a pre-launch demo site. Promptly3D is launching in 2026. Features shown are planned capabilities.</p>
+        <p>This is a pre-launch demo site. Promptly3D is launching late 2025. Features shown are planned capabilities.</p>
     </div>
     <!-- Header -->
     <header class="main-header">
@@ -49,42 +52,27 @@
                 </nav>
             </div>
             <div class="nav-right">
-                <a href="#get-started" class="btn btn-primary">Join Waitlist</a>
+                <a href="#hero-form" class="btn btn-primary">Join Waitlist</a>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-container">
+    <!-- Main content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
             <div class="hero-content">
                 <h1 class="hero-title">Multi-Agent AI CAD Architecture</h1>
                 <div class="coming-soon-badge">
-                    <span class="badge-icon">🚀</span>
-                    <span class="badge-text">Launching 2026</span>
+
+                    <span class="badge-text">Launching Late 2025</span>
                 </div>
                 <p class="hero-subtitle">Advanced Manifold Resolution Principle navigates AI latent space to generate geometrically valid, manufacturable parts. Multi-agent CSG workflow with Gauge Field Anchors ensures production-ready outputs with built-in DFM validation.</p>
                 
                 <!-- 3D Viewer Container -->
                 <div class="three-d-viewer-container">
                     <div id="three-d-canvas" class="three-d-canvas"></div>
-                    <div class="viewer-controls">
-                        <button class="viewer-btn" id="rotate-btn" title="Rotate 3D Model">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                            </svg>
-                        </button>
-                        <button class="viewer-btn" id="zoom-in-btn" title="Zoom In">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
-                            </svg>
-                        </button>
-                        <button class="viewer-btn" id="zoom-out-btn" title="Zoom Out">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M8 11h6"/>
-                            </svg>
-                        </button>
-                    </div>
                     <div class="viewer-info">
                         <span class="info-badge">Interactive CAD Interface</span>
                         <span class="info-text">Professional 3D manipulation • Multi-modal input • Real-time collaboration</span>
@@ -127,7 +115,7 @@
                         </svg>
                     </button>
                     
-                    <p class="form-note">No credit card required • Free to start</p>
+                    <p class="form-note">Free to start</p>
                 </form>
             </div>
         </div>
@@ -152,14 +140,41 @@
                     </ul>
                 </div>
                 <div class="feature-visual">
-                    <div class="feature-demo-box">
-                        <div class="demo-prompt">
-                            <span class="prompt-icon">💬</span>
-                            <p>"Design a bracket with M8 mounting holes, 5mm wall thickness, supporting 50kg load"</p>
-                        </div>
-                        <div class="demo-arrow">→</div>
-                        <div class="demo-result">
-                            <div class="mini-3d-preview" id="feature-preview-1"></div>
+                    <div class="command-interface">
+                        <div class="terminal-window">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="terminal-title">Promptly3D AI</span>
+                            </div>
+                            <div class="terminal-content">
+                                <div class="command-line">
+                                    <span class="prompt">$</span>
+                                    <span class="typing-text" id="natural-language-demo">Create a gear with 24 teeth, 50mm diameter</span>
+                                    <span class="cursor">|</span>
+                                </div>
+                                <div class="parameter-extraction">
+                                    <div class="extraction-line">
+                                        <span class="extraction-label">→ Detected:</span>
+                                        <span class="param-highlight">gear</span>
+                                    </div>
+                                    <div class="extraction-line">
+                                        <span class="extraction-label">→ Teeth:</span>
+                                        <span class="param-highlight">24</span>
+                                    </div>
+                                    <div class="extraction-line">
+                                        <span class="extraction-label">→ Diameter:</span>
+                                        <span class="param-highlight">50mm</span>
+                                    </div>
+                                    <div class="extraction-line success">
+                                        <span class="success-icon">✓</span>
+                                        <span>Part generated successfully</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +194,7 @@
                 <div class="feature-visual">
                     <div class="feature-demo-box">
                         <div class="ai-processing-visual">
-                            <div class="flip-card" role="button" tabindex="0" aria-label="Input Analysis - Click to learn more">
+                            <div class="flip-card" role="button" tabindex="0" data-front-label="Input Analysis - Click to learn more" data-back-label="Input Analysis - Click to learn more" aria-label="Input Analysis - Click to learn more">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front">
                                         <h3>Input Analysis</h3>
@@ -189,7 +204,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flip-card" role="button" tabindex="0" aria-label="Constraint Application - Click to learn more">
+                            <div class="flip-card" role="button" tabindex="0" data-front-label="Constraint Application - Click to learn more" data-back-label="Constraint Application - Click to learn more" aria-label="Constraint Application - Click to learn more">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front">
                                         <h3>Constraint Application</h3>
@@ -199,7 +214,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flip-card" role="button" tabindex="0" aria-label="Optimization - Click to learn more">
+                            <div class="flip-card" role="button" tabindex="0" data-front-label="Optimization - Click to learn more" data-back-label="Optimization - Click to learn more" aria-label="Optimization - Click to learn more">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front">
                                         <h3>Optimization</h3>
@@ -209,7 +224,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flip-card" role="button" tabindex="0" aria-label="Final Model - Click to learn more">
+                            <div class="flip-card" role="button" tabindex="0" data-front-label="Final Model - Click to learn more" data-back-label="Final Model - Click to learn more" aria-label="Final Model - Click to learn more">
                                 <div class="flip-card-inner">
                                     <div class="flip-card-front">
                                         <h3>Final Model</h3>
@@ -249,832 +264,6 @@
         </div>
     </section>
 
-
-    <!-- Professional Interface & Collaboration Section -->
-    <section class="interface-section-enhanced" id="interface-capabilities">
-        <div class="section-container">
-            <!-- Section Header -->
-            <header class="interface-header">
-                <h2 class="section-title">Professional Interface & Collaboration</h2>
-                <p class="section-subtitle">Enterprise-grade CAD interface with advanced 3D manipulation, real-time collaboration, and multi-modal input capabilities</p>
-                
-                <!-- Feature Navigation -->
-                <nav class="feature-navigation" role="tablist" aria-label="Professional Interface Features">
-                    <button class="nav-btn active" role="tab" aria-selected="true" aria-controls="manipulation-panel" data-feature="manipulation">
-                        3D Manipulation
-                    </button>
-                    <button class="nav-btn" role="tab" aria-selected="false" aria-controls="collaboration-panel" data-feature="collaboration">
-                        Collaboration
-                    </button>
-                    <button class="nav-btn" role="tab" aria-selected="false" aria-controls="input-panel" data-feature="input">
-                        Multi-Modal Input
-                    </button>
-                    <button class="nav-btn" role="tab" aria-selected="false" aria-controls="workflow-panel" data-feature="workflow">
-                        Workflow
-                    </button>
-                </nav>
-            </header>
-            
-            <!-- Feature Showcase -->
-            <div class="interface-showcase-enhanced">
-                
-                <!-- Advanced 3D Manipulation -->
-                <article class="interface-feature-enhanced active" id="manipulation-panel" role="tabpanel" aria-labelledby="manipulation-tab" data-feature="manipulation">
-                    <div class="feature-demo-container">
-                        <!-- Interactive 3D Viewport -->
-                        <div class="manipulation-workspace">
-                            <div class="viewport-container">
-                                <canvas id="manipulation-demo" class="demo-canvas"></canvas>
-                                <div class="gizmo-overlay">
-                                    <div class="gizmo-controls">
-                                        <button class="gizmo-btn" data-axis="x" title="X-Axis Constraint" aria-label="X-Axis Movement">
-                                            <span class="axis-indicator x-axis"></span>
-                                        </button>
-                                        <button class="gizmo-btn" data-axis="y" title="Y-Axis Constraint" aria-label="Y-Axis Movement">
-                                            <span class="axis-indicator y-axis"></span>
-                                        </button>
-                                        <button class="gizmo-btn" data-axis="z" title="Z-Axis Constraint" aria-label="Z-Axis Movement">
-                                            <span class="axis-indicator z-axis"></span>
-                                        </button>
-                                        <button class="gizmo-btn" data-mode="rotate" title="Rotation Mode" aria-label="Rotation Mode">
-                                            <span class="mode-icon">🔄</span>
-                                        </button>
-                                        <button class="gizmo-btn" data-mode="scale" title="Scale Mode" aria-label="Scale Mode">
-                                            <span class="mode-icon">📏</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="measurement-overlay">
-                                    <div class="measurement-display">
-                                        <span class="measurement-label">Position:</span>
-                                        <span class="measurement-value" id="position-readout">X: 0.0, Y: 0.0, Z: 0.0</span>
-                                    </div>
-                                    <div class="measurement-display">
-                                        <span class="measurement-label">Rotation:</span>
-                                        <span class="measurement-value" id="rotation-readout">X: 0°, Y: 0°, Z: 0°</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="precision-controls">
-                                <div class="transform-panel">
-                                    <h5>Transform Controls</h5>
-                                    <div class="input-group">
-                                        <label>X Position</label>
-                                        <input type="number" step="0.1" value="0" class="precision-input" data-axis="x" data-type="position">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Y Position</label>
-                                        <input type="number" step="0.1" value="0" class="precision-input" data-axis="y" data-type="position">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Z Position</label>
-                                        <input type="number" step="0.1" value="0" class="precision-input" data-axis="z" data-type="position">
-                                    </div>
-                                </div>
-                                <div class="constraint-panel">
-                                    <h5>Constraints</h5>
-                                    <label class="constraint-toggle">
-                                        <input type="checkbox" id="snap-to-grid">
-                                        <span>Snap to Grid (1mm)</span>
-                                    </label>
-                                    <label class="constraint-toggle">
-                                        <input type="checkbox" id="maintain-proportions">
-                                        <span>Maintain Proportions</span>
-                                    </label>
-                                </div>
-                                <div class="measurement-panel">
-                                    <h5>Measurements</h5>
-                                    <div class="measurement-tool">
-                                        <span>Distance: <strong id="distance-readout">0.0mm</strong></span>
-                                    </div>
-                                    <div class="measurement-tool">
-                                        <span>Volume: <strong id="volume-readout">0.0cm³</strong></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="performance-metrics">
-                                <div class="metric">
-                                    <span class="metric-label">FPS:</span>
-                                    <span class="metric-value" id="fps-counter">60</span>
-                                </div>
-                                <div class="metric">
-                                    <span class="metric-label">Polygons:</span>
-                                    <span class="metric-value" id="polygon-count">1,024</span>
-                                </div>
-                                <div class="metric">
-                                    <span class="metric-label">Memory:</span>
-                                    <span class="metric-value" id="memory-usage">12MB</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-content-enhanced">
-                        <h3 class="feature-title">Advanced 3D Manipulation</h3>
-                        <p class="feature-description">Professional CAD-grade manipulation with hardware-accelerated transformations, precision numeric controls, and real-time constraint solving. Supports sub-millimeter accuracy for manufacturing-ready designs.</p>
-                        
-                        <div class="feature-specifications">
-                            <div class="spec-group">
-                                <h4>Precision Controls</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">📐</span>Sub-millimeter positioning accuracy (±0.01mm)</li>
-                                    <li><span class="spec-icon">🎯</span>Multi-object selection with bounding box highlighting</li>
-                                    <li><span class="spec-icon">📊</span>Real-time measurement and dimensional analysis</li>
-                                    <li><span class="spec-icon">🔗</span>Contextual 3D menus positioned in world space</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="spec-group">
-                                <h4>Advanced Features</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">⚡</span>Hardware-accelerated GPU transformations</li>
-                                    <li><span class="spec-icon">🔄</span>Unlimited undo/redo with branch history</li>
-                                    <li><span class="spec-icon">📏</span>Smart guides with snap-to-grid (0.1-10mm)</li>
-                                    <li><span class="spec-icon">🎨</span>Real-time visual feedback and ghosting</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                
-                <!-- Real-time Collaboration -->
-                <article class="interface-feature-enhanced" id="collaboration-panel" role="tabpanel" aria-labelledby="collaboration-tab" data-feature="collaboration">
-                    <div class="feature-demo-container">
-                        <!-- Collaboration Demo -->
-                        <div class="collaboration-workspace">
-                            <div class="shared-viewport">
-                                <canvas id="collaboration-demo" class="demo-canvas"></canvas>
-                                <div class="user-presence-overlay">
-                                    <div class="user-presence">
-                                        <div class="user-avatar active" data-user="1" title="Jack Spencer - Lead Engineer">
-                                            <div class="avatar-ring"></div>
-                                            <div class="avatar-initial">JS</div>
-                                            <div class="user-cursor" style="--cursor-color: #667eea;"></div>
-                                            <div class="user-status online"></div>
-                                        </div>
-                                        <div class="user-avatar" data-user="2" title="Maria Kim - Manufacturing Engineer">
-                                            <div class="avatar-ring"></div>
-                                            <div class="avatar-initial">MK</div>
-                                            <div class="user-cursor" style="--cursor-color: #48bb78;"></div>
-                                            <div class="user-status online"></div>
-                                        </div>
-                                        <div class="user-avatar" data-user="3" title="Alex Liu - Design Engineer">
-                                            <div class="avatar-ring"></div>
-                                            <div class="avatar-initial">AL</div>
-                                            <div class="user-cursor" style="--cursor-color: #ed8936;"></div>
-                                            <div class="user-status away"></div>
-                                        </div>
-                                        <div class="user-avatar" data-user="4" title="Sarah Chen - Quality Engineer">
-                                            <div class="avatar-ring"></div>
-                                            <div class="avatar-initial">SC</div>
-                                            <div class="user-cursor" style="--cursor-color: #9f7aea;"></div>
-                                            <div class="user-status online"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="spatial-comments">
-                                    <div class="comment-marker" style="top: 30%; left: 40%;" data-comment="1">
-                                        <div class="comment-icon">💬</div>
-                                        <div class="comment-tooltip">
-                                            <strong>Maria:</strong> Should we increase wall thickness here?
-                                        </div>
-                                    </div>
-                                    <div class="comment-marker" style="top: 60%; left: 70%;" data-comment="2">
-                                        <div class="comment-icon">⚠️</div>
-                                        <div class="comment-tooltip">
-                                            <strong>Alex:</strong> Manufacturing constraint violation
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="collaboration-sidebar">
-                                <div class="user-list">
-                                    <h5>Team Members (4 online)</h5>
-                                    <div class="user-item">
-                                        <div class="user-avatar-small">JS</div>
-                                        <div class="user-info">
-                                            <span class="user-name">Jack Spencer</span>
-                                            <span class="user-role">Lead Engineer</span>
-                                        </div>
-                                        <div class="user-permissions">Edit</div>
-                                    </div>
-                                    <div class="user-item">
-                                        <div class="user-avatar-small">MK</div>
-                                        <div class="user-info">
-                                            <span class="user-name">Maria Kim</span>
-                                            <span class="user-role">Manufacturing</span>
-                                        </div>
-                                        <div class="user-permissions">Edit</div>
-                                    </div>
-                                    <div class="user-item">
-                                        <div class="user-avatar-small">AL</div>
-                                        <div class="user-info">
-                                            <span class="user-name">Alex Liu</span>
-                                            <span class="user-role">Design Engineer</span>
-                                        </div>
-                                        <div class="user-permissions">View</div>
-                                    </div>
-                                    <div class="user-item">
-                                        <div class="user-avatar-small">SC</div>
-                                        <div class="user-info">
-                                            <span class="user-name">Sarah Chen</span>
-                                            <span class="user-role">Quality Engineer</span>
-                                        </div>
-                                        <div class="user-permissions">Review</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="chat-panel">
-                                    <h5>Team Chat</h5>
-                                    <div class="chat-messages">
-                                        <div class="chat-message">
-                                            <span class="message-author">Jack:</span>
-                                            <span class="message-text">Updated the mounting holes to M8</span>
-                                            <span class="message-time">2m ago</span>
-                                        </div>
-                                        <div class="chat-message">
-                                            <span class="message-author">Maria:</span>
-                                            <span class="message-text">Looks good! Running DFM validation now</span>
-                                            <span class="message-time">1m ago</span>
-                                        </div>
-                                        <div class="chat-message active">
-                                            <span class="message-author">Sarah:</span>
-                                            <span class="message-text">Added QC checkpoints for critical dimensions</span>
-                                            <span class="message-time">30s ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="chat-input">
-                                        <input type="text" placeholder="Type a message..." aria-label="Chat message">
-                                        <button class="send-btn" aria-label="Send message">📤</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="version-control">
-                                    <h5>Version History</h5>
-                                    <div class="version-timeline">
-                                        <div class="version-branch main-branch">
-                                            <div class="version-commit current">
-                                                <div class="commit-hash">a7f3b2c</div>
-                                                <div class="commit-message">Update wall thickness per manufacturing review</div>
-                                                <div class="commit-author">Jack • 5min ago</div>
-                                            </div>
-                                            <div class="version-commit">
-                                                <div class="commit-hash">d9e1a4f</div>
-                                                <div class="commit-message">Add M8 mounting holes with counterbore</div>
-                                                <div class="commit-author">Maria • 15min ago</div>
-                                            </div>
-                                            <div class="version-commit">
-                                                <div class="commit-hash">c2b8f6a</div>
-                                                <div class="commit-message">Initial bracket geometry</div>
-                                                <div class="commit-author">Jack • 1hr ago</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-content-enhanced">
-                        <h3 class="feature-title">Real-time Collaboration</h3>
-                        <p class="feature-description">Enterprise-grade multi-user design environment with spatial awareness, intelligent conflict resolution, and git-style version control. Teams collaborate seamlessly with real-time synchronization and role-based permissions.</p>
-                        
-                        <div class="feature-specifications">
-                            <div class="spec-group">
-                                <h4>Team Collaboration</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">👥</span>Up to 50 concurrent users per workspace</li>
-                                    <li><span class="spec-icon">🔄</span>Real-time sync with <100ms latency</li>
-                                    <li><span class="spec-icon">🛡️</span>Intelligent conflict resolution & merging</li>
-                                    <li><span class="spec-icon">💬</span>Spatial comments & integrated voice chat</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="spec-group">
-                                <h4>Version Control</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">📚</span>Git-style branching and merging workflow</li>
-                                    <li><span class="spec-icon">🏷️</span>Semantic versioning with release tags</li>
-                                    <li><span class="spec-icon">🔍</span>Visual diff for 3D geometry changes</li>
-                                    <li><span class="spec-icon">🔐</span>Role-based permissions & access control</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                
-                <!-- Multi-Modal Input -->
-                <article class="interface-feature-enhanced" id="input-panel" role="tabpanel" aria-labelledby="input-tab" data-feature="input">
-                    <div class="feature-demo-container">
-                        <!-- Multi-Modal Input Hub -->
-                        <div class="multimodal-input-hub">
-                            <div class="input-method-selector">
-                                <button class="method-tab voice-tab active" data-method="voice" aria-selected="true">
-                                    <span class="tab-icon">🎙️</span>
-                                    <span class="tab-label">Voice Commands</span>
-                                    <span class="tab-status">95% Accuracy</span>
-                                </button>
-                                <button class="method-tab sketch-tab" data-method="sketch" aria-selected="false">
-                                    <span class="tab-icon">✏️</span>
-                                    <span class="tab-label">Sketch Recognition</span>
-                                    <span class="tab-status">Real-time</span>
-                                </button>
-                                <button class="method-tab upload-tab" data-method="upload" aria-selected="false">
-                                    <span class="tab-icon">📐</span>
-                                    <span class="tab-label">Technical Import</span>
-                                    <span class="tab-status">PDF/DWG</span>
-                                </button>
-                                <button class="method-tab photo-tab" data-method="photo" aria-selected="false">
-                                    <span class="tab-icon">📸</span>
-                                    <span class="tab-label">Photo Analysis</span>
-                                    <span class="tab-status">OCR + AI</span>
-                                </button>
-                            </div>
-                            
-                            <div class="input-workspace">
-                                <!-- Voice Interface -->
-                                <div class="voice-interface input-interface active" data-method="voice">
-                                    <div class="voice-controls">
-                                        <button class="voice-btn" id="start-voice" aria-label="Start voice recording">
-                                            <span class="voice-icon">🎤</span>
-                                            <span class="voice-status">Ready to listen</span>
-                                        </button>
-                                        <div class="voice-quality">
-                                            <span class="quality-label">Audio Quality:</span>
-                                            <div class="quality-bars">
-                                                <div class="quality-bar active"></div>
-                                                <div class="quality-bar active"></div>
-                                                <div class="quality-bar active"></div>
-                                                <div class="quality-bar active"></div>
-                                                <div class="quality-bar"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="voice-visualization">
-                                        <canvas id="voice-waveform" class="waveform-canvas"></canvas>
-                                        <div class="waveform-overlay">
-                                            <div class="frequency-display">
-                                                <span class="freq-label">Frequency Analysis</span>
-                                                <div class="freq-bars">
-                                                    <div class="freq-bar" style="height: 20%"></div>
-                                                    <div class="freq-bar" style="height: 45%"></div>
-                                                    <div class="freq-bar" style="height: 60%"></div>
-                                                    <div class="freq-bar" style="height: 35%"></div>
-                                                    <div class="freq-bar" style="height: 80%"></div>
-                                                    <div class="freq-bar" style="height: 25%"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="voice-transcript">
-                                        <div class="transcript-header">
-                                            <h5>Live Transcript</h5>
-                                            <span class="confidence-score">Confidence: 97%</span>
-                                        </div>
-                                        <div class="transcript-content">
-                                            <p class="transcript-text">"Create a mounting bracket for 50kg load capacity with M8 bolt holes spaced 100mm apart and 5mm wall thickness using aluminum 6061-T6"</p>
-                                        </div>
-                                        <div class="nlp-analysis">
-                                            <h6>Extracted Parameters:</h6>
-                                            <div class="parameter-tags">
-                                                <span class="param-tag load">Load: 50kg</span>
-                                                <span class="param-tag fastener">Fastener: M8</span>
-                                                <span class="param-tag dimension">Spacing: 100mm</span>
-                                                <span class="param-tag thickness">Wall: 5mm</span>
-                                                <span class="param-tag material">Material: Al 6061-T6</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Sketch Interface -->
-                                <div class="sketch-interface input-interface" data-method="sketch">
-                                    <div class="sketch-workspace">
-                                        <div class="sketch-canvas-container">
-                                            <canvas id="sketch-canvas" class="sketch-canvas"></canvas>
-                                            <div class="sketch-overlay">
-                                                <div class="constraint-hints">
-                                                    <div class="hint-line horizontal" style="top: 40%"></div>
-                                                    <div class="hint-line vertical" style="left: 60%"></div>
-                                                    <div class="dimension-hint" style="top: 20%; left: 30%">50mm</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="sketch-tools">
-                                            <div class="tool-group">
-                                                <h6>Drawing Tools</h6>
-                                                <button class="sketch-tool active" data-tool="pen" title="Freehand Drawing">✏️</button>
-                                                <button class="sketch-tool" data-tool="line" title="Straight Line">📏</button>
-                                                <button class="sketch-tool" data-tool="rectangle" title="Rectangle">⬜</button>
-                                                <button class="sketch-tool" data-tool="circle" title="Circle">⭕</button>
-                                            </div>
-                                            <div class="tool-group">
-                                                <h6>Constraints</h6>
-                                                <button class="constraint-tool" data-constraint="horizontal" title="Horizontal">⟷</button>
-                                                <button class="constraint-tool" data-constraint="vertical" title="Vertical">↕️</button>
-                                                <button class="constraint-tool" data-constraint="parallel" title="Parallel">∥</button>
-                                                <button class="constraint-tool" data-constraint="perpendicular" title="Perpendicular">⊥</button>
-                                            </div>
-                                            <div class="tool-group">
-                                                <h6>Actions</h6>
-                                                <button class="action-btn" id="clear-sketch" title="Clear Canvas">🗑️</button>
-                                                <button class="action-btn" id="generate-3d" title="Generate 3D">🎯</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="sketch-preview">
-                                        <h5>3D Preview</h5>
-                                        <canvas id="sketch-result" class="result-canvas"></canvas>
-                                        <div class="inference-info">
-                                            <p><strong>Inferred Geometry:</strong> Rectangular bracket with mounting holes</p>
-                                            <p><strong>Constraints:</strong> 4 detected, 2 applied automatically</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Upload Interface -->
-                                <div class="upload-interface input-interface" data-method="upload">
-                                    <div class="upload-zone">
-                                        <div class="upload-area" id="file-drop-zone">
-                                            <div class="upload-icon">📁</div>
-                                            <h5>Drop Technical Drawings Here</h5>
-                                            <p>Supports PDF, DWG, DXF, STEP files up to 50MB</p>
-                                            <button class="upload-btn">Choose Files</button>
-                                            <input type="file" id="file-input" multiple accept=".pdf,.dwg,.dxf,.step,.stp" style="display: none;">
-                                        </div>
-                                        <div class="upload-progress" style="display: none;">
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" style="width: 0%"></div>
-                                            </div>
-                                            <span class="progress-text">Processing... 0%</span>
-                                        </div>
-                                    </div>
-                                    <div class="drawing-analysis">
-                                        <div class="analysis-preview">
-                                            <div class="drawing-viewer">
-                                                <svg class="technical-drawing" viewBox="0 0 400 300">
-                                                    <!-- Enhanced technical drawing -->
-                                                    <rect x="50" y="100" width="300" height="150" fill="none" stroke="#333" stroke-width="2"/>
-                                                    <circle cx="100" cy="130" r="8" fill="none" stroke="#333" stroke-width="1"/>
-                                                    <circle cx="300" cy="130" r="8" fill="none" stroke="#333" stroke-width="1"/>
-                                                    <circle cx="100" cy="220" r="8" fill="none" stroke="#333" stroke-width="1"/>
-                                                    <circle cx="300" cy="220" r="8" fill="none" stroke="#333" stroke-width="1"/>
-                                                    <text x="200" y="90" text-anchor="middle" font-size="14" font-family="monospace">250mm</text>
-                                                    <text x="30" y="180" text-anchor="middle" font-size="14" font-family="monospace">120mm</text>
-                                                    <text x="100" y="280" text-anchor="middle" font-size="12" font-family="monospace">M8</text>
-                                                    <text x="300" y="280" text-anchor="middle" font-size="12" font-family="monospace">M8</text>
-                                                </svg>
-                                            </div>
-                                            <div class="ocr-results">
-                                                <h6>OCR Analysis Results</h6>
-                                                <div class="detected-elements">
-                                                    <div class="element-group">
-                                                        <h6>Dimensions</h6>
-                                                        <div class="element-tag">250mm × 120mm</div>
-                                                        <div class="element-tag">Thickness: 10mm</div>
-                                                    </div>
-                                                    <div class="element-group">
-                                                        <h6>Features</h6>
-                                                        <div class="element-tag">4× M8 holes</div>
-                                                        <div class="element-tag">200mm spacing</div>
-                                                    </div>
-                                                    <div class="element-group">
-                                                        <h6>Materials</h6>
-                                                        <div class="element-tag">Steel S235JR</div>
-                                                        <div class="element-tag">Surface: Zinc plated</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Photo Interface -->
-                                <div class="photo-interface input-interface" data-method="photo">
-                                    <div class="photo-capture">
-                                        <div class="camera-view">
-                                            <div class="camera-placeholder">
-                                                <div class="camera-icon">📷</div>
-                                                <h5>Take Photo of Physical Part</h5>
-                                                <p>Position part with good lighting and clear dimensions</p>
-                                                <button class="capture-btn">Capture Photo</button>
-                                            </div>
-                                        </div>
-                                        <div class="measurement-tools">
-                                            <h6>Measurement Tools</h6>
-                                            <div class="tool-grid">
-                                                <button class="measure-tool" data-tool="ruler" title="Linear Measurement">📏</button>
-                                                <button class="measure-tool" data-tool="caliper" title="Precision Measurement">📐</button>
-                                                <button class="measure-tool" data-tool="angle" title="Angle Measurement">📐</button>
-                                                <button class="measure-tool" data-tool="area" title="Area Calculation">⬜</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="photo-analysis">
-                                        <h5>AI Analysis Results</h5>
-                                        <div class="analysis-results">
-                                            <div class="detected-features">
-                                                <h6>Detected Features</h6>
-                                                <ul class="feature-list">
-                                                    <li>🔍 Rectangular profile detected</li>
-                                                    <li>🔍 4 circular features (likely holes)</li>
-                                                    <li>🔍 Material appears metallic</li>
-                                                    <li>🔍 Surface finish: machined</li>
-                                                </ul>
-                                            </div>
-                                            <div class="extracted-dimensions">
-                                                <h6>Estimated Dimensions</h6>
-                                                <div class="dimension-list">
-                                                    <div class="dimension-item">Length: ~200mm ±5mm</div>
-                                                    <div class="dimension-item">Width: ~100mm ±3mm</div>
-                                                    <div class="dimension-item">Hole Ø: ~8mm ±1mm</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="ai-processing-panel">
-                                <div class="processing-status">
-                                    <div class="status-indicator processing">
-                                        <div class="status-dot"></div>
-                                        <span class="status-text">AI Processing Active</span>
-                                    </div>
-                                    <div class="processing-metrics">
-                                        <span class="metric">Accuracy: 97%</span>
-                                        <span class="metric">Speed: <1s</span>
-                                        <span class="metric">Confidence: High</span>
-                                    </div>
-                                </div>
-                                <div class="ai-suggestions">
-                                    <h6>AI Suggestions</h6>
-                                    <div class="suggestion-list">
-                                        <div class="suggestion-item">💡 Consider adding fillets for stress concentration</div>
-                                        <div class="suggestion-item">💡 Material thickness adequate for 50kg load</div>
-                                        <div class="suggestion-item">💡 Standard M8 hardware recommended</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-content-enhanced">
-                        <h3 class="feature-title">Multi-Modal Input</h3>
-                        <p class="feature-description">Advanced AI-powered input methods combining voice recognition, sketch analysis, technical drawing OCR, and photo measurement. Natural interaction meets professional precision with real-time processing and intelligent suggestions.</p>
-                        
-                        <div class="feature-specifications">
-                            <div class="spec-group">
-                                <h4>Input Capabilities</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">🗣️</span>Voice-to-CAD with 97% accuracy and technical vocabulary</li>
-                                    <li><span class="spec-icon">✏️</span>Sketch-to-3D with automatic constraint inference</li>
-                                    <li><span class="spec-icon">📄</span>PDF/DWG/STEP technical drawing import and OCR</li>
-                                    <li><span class="spec-icon">📸</span>Photo analysis with dimensional extraction</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="spec-group">
-                                <h4>AI Recognition</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">🧠</span>Technical vocabulary and manufacturing terms</li>
-                                    <li><span class="spec-icon">📐</span>Automatic dimension and tolerance recognition</li>
-                                    <li><span class="spec-icon">🔍</span>Standard fasteners and component identification</li>
-                                    <li><span class="spec-icon">⚡</span>Real-time processing with <1s response time</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                
-                <!-- Manufacturing Workflow Integration -->
-                <article class="interface-feature-enhanced" id="workflow-panel" role="tabpanel" aria-labelledby="workflow-tab" data-feature="workflow">
-                    <div class="feature-demo-container">
-                        <!-- Workflow Integration Hub -->
-                        <div class="workflow-integration-hub">
-                            <div class="process-diagram">
-                                <div class="workflow-stage design active" data-stage="design">
-                                    <div class="stage-icon">🎯</div>
-                                    <h5>Design</h5>
-                                    <p>CAD Creation & AI Generation</p>
-                                    <div class="stage-status online">Active</div>
-                                </div>
-                                <div class="workflow-stage validate" data-stage="validate">
-                                    <div class="stage-icon">🔍</div>
-                                    <h5>Validate</h5>
-                                    <p>DFM Analysis & Quality Control</p>
-                                    <div class="stage-status processing">Processing</div>
-                                </div>
-                                <div class="workflow-stage manufacture" data-stage="manufacture">
-                                    <div class="stage-icon">🏭</div>
-                                    <h5>Manufacture</h5>
-                                    <p>CNC, 3D Print, Laser Cut</p>
-                                    <div class="stage-status pending">Queued</div>
-                                </div>
-                                <div class="workflow-stage deliver" data-stage="deliver">
-                                    <div class="stage-icon">📦</div>
-                                    <h5>Deliver</h5>
-                                    <p>Assembly & Quality Assurance</p>
-                                    <div class="stage-status pending">Pending</div>
-                                </div>
-                            </div>
-                            
-                            <div class="integration-panel">
-                                <div class="system-connections">
-                                    <h6>Live System Connections</h6>
-                                    <div class="connection-grid">
-                                        <div class="connection-item active">
-                                            <div class="connection-status"></div>
-                                            <div class="connection-info">
-                                                <span class="system-name">SolidWorks PDM</span>
-                                                <span class="connection-type">PLM Integration</span>
-                                            </div>
-                                            <div class="connection-metrics">
-                                                <span class="metric-value">127ms</span>
-                                                <span class="metric-label">Latency</span>
-                                            </div>
-                                        </div>
-                                        <div class="connection-item active">
-                                            <div class="connection-status"></div>
-                                            <div class="connection-info">
-                                                <span class="system-name">Haas CNC</span>
-                                                <span class="connection-type">Machine Controller</span>
-                                            </div>
-                                            <div class="connection-metrics">
-                                                <span class="metric-value">98%</span>
-                                                <span class="metric-label">Uptime</span>
-                                            </div>
-                                        </div>
-                                        <div class="connection-item warning">
-                                            <div class="connection-status"></div>
-                                            <div class="connection-info">
-                                                <span class="system-name">3D Printer Farm</span>
-                                                <span class="connection-type">Additive Manufacturing</span>
-                                            </div>
-                                            <div class="connection-metrics">
-                                                <span class="metric-value">2/8</span>
-                                                <span class="metric-label">Available</span>
-                                            </div>
-                                        </div>
-                                        <div class="connection-item active">
-                                            <div class="connection-status"></div>
-                                            <div class="connection-info">
-                                                <span class="system-name">QC Vision System</span>
-                                                <span class="connection-type">Quality Control</span>
-                                            </div>
-                                            <div class="connection-metrics">
-                                                <span class="metric-value">99.7%</span>
-                                                <span class="metric-label">Accuracy</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="api-status">
-                                    <h6>API Integration Status</h6>
-                                    <div class="api-list">
-                                        <div class="api-item">
-                                            <span class="api-name">Manufacturing Execution System</span>
-                                            <div class="api-indicator online"></div>
-                                            <span class="api-response">45ms</span>
-                                        </div>
-                                        <div class="api-item">
-                                            <span class="api-name">Enterprise Resource Planning</span>
-                                            <div class="api-indicator online"></div>
-                                            <span class="api-response">72ms</span>
-                                        </div>
-                                        <div class="api-item">
-                                            <span class="api-name">Supply Chain Management</span>
-                                            <div class="api-indicator online"></div>
-                                            <span class="api-response">156ms</span>
-                                        </div>
-                                        <div class="api-item">
-                                            <span class="api-name">Quality Management System</span>
-                                            <div class="api-indicator maintenance"></div>
-                                            <span class="api-response">Maintenance</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="data-flow">
-                                    <h6>Real-time Data Flow</h6>
-                                    <div class="flow-visualization">
-                                        <div class="flow-node design-node">
-                                            <span class="node-label">Design Files</span>
-                                            <span class="data-count">247 MB/s</span>
-                                        </div>
-                                        <div class="flow-arrow">→</div>
-                                        <div class="flow-node validation-node">
-                                            <span class="node-label">DFM Analysis</span>
-                                            <span class="data-count">156 parts/min</span>
-                                        </div>
-                                        <div class="flow-arrow">→</div>
-                                        <div class="flow-node production-node">
-                                            <span class="node-label">Production Queue</span>
-                                            <span class="data-count">23 jobs active</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="quality-dashboard">
-                                <div class="metrics-grid">
-                                    <div class="metric-card">
-                                        <div class="metric-header">
-                                            <span class="metric-title">Production Efficiency</span>
-                                            <span class="metric-trend up">↗ +2.3%</span>
-                                        </div>
-                                        <div class="metric-value">94.7%</div>
-                                        <div class="metric-subtitle">vs. target 92%</div>
-                                    </div>
-                                    <div class="metric-card">
-                                        <div class="metric-header">
-                                            <span class="metric-title">Quality Score</span>
-                                            <span class="metric-trend up">↗ +0.8%</span>
-                                        </div>
-                                        <div class="metric-value">99.2%</div>
-                                        <div class="metric-subtitle">First pass yield</div>
-                                    </div>
-                                    <div class="metric-card">
-                                        <div class="metric-header">
-                                            <span class="metric-title">Lead Time</span>
-                                            <span class="metric-trend down">↘ -15%</span>
-                                        </div>
-                                        <div class="metric-value">3.2</div>
-                                        <div class="metric-subtitle">days avg</div>
-                                    </div>
-                                    <div class="metric-card">
-                                        <div class="metric-header">
-                                            <span class="metric-title">Cost Reduction</span>
-                                            <span class="metric-trend up">↗ +12%</span>
-                                        </div>
-                                        <div class="metric-value">$47K</div>
-                                        <div class="metric-subtitle">this month</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="alerts-panel">
-                                    <h6>System Alerts & Notifications</h6>
-                                    <div class="alert-list">
-                                        <div class="alert-item info">
-                                            <div class="alert-icon">ℹ️</div>
-                                            <div class="alert-content">
-                                                <span class="alert-title">Material delivery scheduled</span>
-                                                <span class="alert-time">2 hours ago</span>
-                                            </div>
-                                        </div>
-                                        <div class="alert-item warning">
-                                            <div class="alert-icon">⚠️</div>
-                                            <div class="alert-content">
-                                                <span class="alert-title">CNC tool wear approaching limit</span>
-                                                <span class="alert-time">15 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <div class="alert-item success">
-                                            <div class="alert-icon">✅</div>
-                                            <div class="alert-content">
-                                                <span class="alert-title">Quality inspection completed: 24/24 parts passed</span>
-                                                <span class="alert-time">Just now</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-content-enhanced">
-                        <h3 class="feature-title">Manufacturing Workflow Integration</h3>
-                        <p class="feature-description">Enterprise-grade manufacturing execution platform with real-time system integration, automated quality control, and intelligent production optimization. Seamlessly connects design to delivery with comprehensive analytics and monitoring.</p>
-                        
-                        <div class="feature-specifications">
-                            <div class="spec-group">
-                                <h4>System Integration</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">🔗</span>RESTful APIs for PLM, ERP, MES, and QMS systems</li>
-                                    <li><span class="spec-icon">📡</span>Real-time data sync with <100ms latency</li>
-                                    <li><span class="spec-icon">🔒</span>Enterprise security with SOC2 compliance</li>
-                                    <li><span class="spec-icon">📊</span>Custom workflow automation and triggers</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="spec-group">
-                                <h4>Production Excellence</h4>
-                                <ul class="spec-list">
-                                    <li><span class="spec-icon">📄</span>Automated work instructions and NC programs</li>
-                                    <li><span class="spec-icon">✅</span>AI-powered quality control and inspection</li>
-                                    <li><span class="spec-icon">📈</span>Real-time production analytics dashboard</li>
-                                    <li><span class="spec-icon">🎯</span>Predictive maintenance and defect analysis</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
     <!-- How It Works Section -->
     <section id="how-it-works" class="how-section">
         <div class="section-container">
@@ -1085,11 +274,13 @@
                 <div class="step-card" data-step="1">
                     <div class="step-number">01</div>
                     <div class="step-icon-box">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14,2 14,8 20,8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" stroke="var(--primary-purple)">
+                            <!-- Document with text icon -->
+                            <rect x="12" y="8" width="40" height="48" rx="4" stroke-width="2"/>
+                            <line x1="20" y1="20" x2="44" y2="20" stroke-width="2"/>
+                            <line x1="20" y1="28" x2="44" y2="28" stroke-width="2"/>
+                            <line x1="20" y1="36" x2="36" y2="36" stroke-width="2"/>
+                            <line x1="20" y1="44" x2="40" y2="44" stroke-width="2"/>
                         </svg>
                     </div>
                     <h3 class="step-title">Describe Your Part</h3>
@@ -1101,17 +292,21 @@
                     <div class="step-icon-box">
                         <img src="promptly3d-logo.png" alt="AI Processing" class="step-logo">
                     </div>
-                    <h3 class="step-title">Multi-Agent CSG Processing</h3>
-                    <p class="step-description">Multi-agent CSG workflow resolves valid engineering manifolds in latent space. Gauge Field Anchors enforce geometric constraints while maintaining manufacturability through AI-First Quality Framework.</p>
+                    <h3 class="step-title">AI Processing</h3>
+                    <p class="step-description">Multi-Agent CSG Processing
+Multi-agent CSG workflow resolves valid engineering manifolds in latent space. Gauge Field Anchors enforce geometric constraints while maintaining manufacturability through AI-First Quality Framework.</p>
                 </div>
                 
                 <div class="step-card" data-step="3">
                     <div class="step-number">03</div>
                     <div class="step-icon-box">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                            <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
-                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" stroke="var(--primary-purple)">
+                            <!-- 3D cube with edit icon -->
+                            <path d="M32 12 L48 20 L48 44 L32 52 L16 44 L16 20 Z" stroke-width="2"/>
+                            <path d="M32 12 L32 52" stroke-width="2"/>
+                            <path d="M16 20 L48 20" stroke-width="2"/>
+                            <circle cx="44" cy="44" r="12" fill="var(--primary-purple)" stroke="none"/>
+                            <path d="M40 44 L48 44 M44 40 L44 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
                     <h3 class="step-title">Collaborate & Refine</h3>
@@ -1121,11 +316,14 @@
                 <div class="step-card" data-step="4">
                     <div class="step-number">04</div>
                     <div class="step-icon-box">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <rect x="1" y="3" width="15" height="13" rx="2"/>
-                            <path d="M16 8h4l3 3v5h-7V8z"/>
-                            <circle cx="5.5" cy="18.5" r="2.5"/>
-                            <circle cx="18.5" cy="18.5" r="2.5"/>
+                        <svg class="step-icon" viewBox="0 0 64 64" fill="none" stroke="var(--primary-purple)">
+                            <!-- Manufacturing/export icon -->
+                            <rect x="12" y="16" width="32" height="32" rx="4" stroke-width="2"/>
+                            <path d="M52 24 L52 48 C52 50.2091 50.2091 52 48 52 L20 52" stroke-width="2"/>
+                            <path d="M44 16 L52 24 L44 32" stroke-width="2" stroke-linejoin="round"/>
+                            <circle cx="20" cy="28" r="3" stroke-width="2"/>
+                            <circle cx="32" cy="36" r="3" stroke-width="2"/>
+                            <line x1="20" y1="31" x2="29" y2="36" stroke-width="2"/>
                         </svg>
                     </div>
                     <h3 class="step-title">Manufacture</h3>
@@ -1216,10 +414,11 @@
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <p class="cta-note">No commitment required • Be first to access • Coming 2026</p>
+                <p class="cta-note">No commitment required • Be first to access • Coming Late 2025</p>
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer class="main-footer">
@@ -1274,7 +473,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Promptly3D. All rights reserved. • Coming Soon 2026</p>
+                <p>&copy; 2025 Promptly3D. All rights reserved. • Coming Soon Late 2025</p>
                 <div class="footer-legal">
                     <a href="#privacy">Privacy Policy</a>
                     <a href="#terms">Terms of Service</a>
