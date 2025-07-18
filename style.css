@@ -547,9 +547,12 @@ img {
     padding: 40px;
     box-shadow: var(--shadow-xl);
     /* Align with left content and raise position */
-    margin-top: -20px; /* Raise form higher for better visual balance */
+    margin-top: -60px; /* Raise form much higher for better visual balance */
     max-width: 450px; /* Constrain width for better proportion */
     justify-self: start; /* Align to the start of its grid area */
+    align-self: start; /* Align to top of grid area */
+    position: relative;
+    z-index: 10; /* Ensure form appears above other elements */
 }
 
 .signup-form {
@@ -837,6 +840,12 @@ html {
     cursor: pointer;
     transition: all var(--transition-base);
     border-radius: 12px;
+    /* Better touch targets for mobile */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    /* Improve performance */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .flip-card:hover {
@@ -846,6 +855,13 @@ html {
 .flip-card:focus {
     outline: 3px solid var(--primary-purple);
     outline-offset: 2px;
+    transform: translateY(-2px);
+}
+
+.flip-card:focus-visible {
+    outline: 3px solid var(--primary-purple);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.2);
 }
 
 .flip-card-inner {
@@ -2791,6 +2807,546 @@ html {
     color: var(--interface-secondary);
 }
 
+/* ================================
+   Multi-Modal Input Hub
+   ================================ */
+
+.multimodal-input-hub {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+    height: 100%;
+}
+
+.input-method-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: var(--glass-bg);
+    padding: 8px;
+    border-radius: 16px;
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+.method-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--tab-transition);
+    position: relative;
+}
+
+.method-tab:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.method-tab.active {
+    background: var(--tab-active-gradient);
+    color: white;
+    box-shadow: var(--tab-shadow-active);
+}
+
+.tab-status {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.input-workspace {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.input-interface {
+    display: none;
+    height: 100%;
+}
+
+.input-interface.active {
+    display: grid;
+}
+
+/* Voice Interface */
+.voice-interface {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.voice-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.voice-btn {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--tab-active-gradient);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.voice-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+}
+
+.voice-icon {
+    font-size: 2rem;
+}
+
+.voice-status {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.quality-bars {
+    display: flex;
+    gap: 4px;
+    align-items: end;
+}
+
+.quality-bar {
+    width: 8px;
+    height: 20px;
+    background: var(--interface-border);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.quality-bar.active {
+    background: var(--interface-success);
+}
+
+.voice-visualization {
+    position: relative;
+    background: var(--viewport-bg);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.waveform-canvas {
+    width: 100%;
+    height: 120px;
+    display: block;
+}
+
+.freq-bars {
+    display: flex;
+    gap: 4px;
+    align-items: end;
+}
+
+.freq-bar {
+    width: 12px;
+    background: var(--interface-accent);
+    border-radius: 2px;
+    min-height: 8px;
+    transition: height 0.3s ease;
+}
+
+.parameter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.param-tag {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.param-tag.load { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+.param-tag.fastener { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+.param-tag.dimension { background: rgba(16, 185, 129, 0.1); color: #059669; }
+.param-tag.thickness { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+.param-tag.material { background: rgba(139, 92, 246, 0.1); color: #7c3aed; }
+
+/* Sketch Interface */
+.sketch-interface {
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+}
+
+.sketch-canvas {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed var(--interface-border);
+    border-radius: 8px;
+    background: white;
+    cursor: crosshair;
+}
+
+.sketch-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tool-group h6 {
+    margin: 0 0 8px 0;
+    font-size: 0.75rem;
+    color: var(--interface-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sketch-tool,
+.constraint-tool,
+.action-btn {
+    padding: 8px;
+    border: 1px solid var(--interface-border);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.sketch-tool:hover,
+.constraint-tool:hover,
+.action-btn:hover {
+    background: var(--interface-bg-light);
+    border-color: var(--interface-accent);
+}
+
+.sketch-tool.active {
+    background: var(--interface-accent);
+    color: white;
+    border-color: var(--interface-accent);
+}
+
+/* Upload Interface */
+.upload-area {
+    border: 2px dashed var(--interface-border);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    background: rgba(102, 126, 234, 0.05);
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: var(--interface-accent);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.upload-btn {
+    padding: 12px 24px;
+    background: var(--interface-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: background 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: #5a67d8;
+}
+
+.element-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--interface-primary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    margin: 2px;
+}
+
+/* AI Processing Panel */
+.ai-processing-panel {
+    background: var(--viewport-bg);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--interface-success);
+    border-radius: 50%;
+    animation: statusPulse 2s infinite ease-in-out;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.processing-metrics {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.metric {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+/* ================================
+   Workflow Integration Hub
+   ================================ */
+
+.workflow-integration-hub {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "process integration"
+        "dashboard dashboard";
+    gap: 20px;
+    height: 100%;
+}
+
+.process-diagram { 
+    grid-area: process;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.integration-panel { 
+    grid-area: integration;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.quality-dashboard { 
+    grid-area: dashboard;
+    background: var(--viewport-bg);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+}
+
+.workflow-stage {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.workflow-stage:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.workflow-stage.active {
+    border: 2px solid var(--interface-accent);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.stage-status {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.stage-status.online { background: rgba(72, 187, 120, 0.1); color: #2d7748; }
+.stage-status.processing { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+.stage-status.pending { background: rgba(156, 163, 175, 0.1); color: #6b7280; }
+
+.connection-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.connection-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(102, 126, 234, 0.05);
+    transition: background 0.3s ease;
+}
+
+.connection-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.connection-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #48bb78;
+    animation: connectionPulse 2s infinite ease-in-out;
+}
+
+.connection-item.warning .connection-status {
+    background: #ed8936;
+}
+
+@keyframes connectionPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.system-name {
+    font-weight: 600;
+    color: var(--interface-primary);
+    font-size: 0.875rem;
+}
+
+.connection-type {
+    font-size: 0.75rem;
+    color: var(--interface-secondary);
+}
+
+.metric-value {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: var(--interface-primary);
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.metric-title {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.metric-trend.up { color: #48bb78; }
+.metric-trend.down { color: #f56565; }
+
+.metric-card .metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.metric-subtitle {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alert-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.alert-item.info { border-left: 3px solid #3b82f6; }
+.alert-item.warning { border-left: 3px solid #f59e0b; }
+.alert-item.success { border-left: 3px solid #10b981; }
+
+.alert-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.alert-title {
+    font-size: 0.875rem;
+    color: white;
+}
+
+.alert-time {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 .workspace-3d {
     position: relative;
     background: var(--interface-bg-dark);
@@ -3651,9 +4207,15 @@ html {
 .btn:focus,
 .form-input:focus,
 .form-select:focus,
-.form-textarea:focus {
+.form-textarea:focus,
+.flip-card:focus {
     outline: 2px solid var(--interface-accent);
     outline-offset: 2px;
+}
+
+/* Enhanced focus for flip cards */
+.flip-card:focus-within {
+    transform: translateY(-2px);
 }
 
 /* Enhanced focus styles for waitlist elements */

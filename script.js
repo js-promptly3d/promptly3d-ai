@@ -282,28 +282,28 @@ class ProcessingBracket {
     applyMaterial() {
         // Professional material system
         const materials = {
-            aluminum: new THREE.MeshStandardMaterial({
-                color: 0xC0C0C0,           // Professional aluminum
-                metalness: 0.9,
-                roughness: 0.1,
-                envMapIntensity: 1.0,
+            chrome: new THREE.MeshStandardMaterial({
+                color: 0xF0F0F0,           // Chrome steel bearing
+                metalness: 1.0,
+                roughness: 0.05,
+                envMapIntensity: 2.0,
                 transparent: false
             }),
             steel: new THREE.MeshStandardMaterial({
-                color: 0x8C8C8C,           // Industrial steel
+                color: 0xE8E8E8,           // Stainless steel
                 metalness: 0.95,
-                roughness: 0.15,
-                envMapIntensity: 0.8
+                roughness: 0.1,
+                envMapIntensity: 1.5
             }),
-            anodized: new THREE.MeshStandardMaterial({
-                color: 0x34495E,           // Dark anodized finish
-                metalness: 0.8,
-                roughness: 0.2,
-                envMapIntensity: 0.9
+            titanium: new THREE.MeshStandardMaterial({
+                color: 0xD4D4D4,           // Titanium finish
+                metalness: 0.85,
+                roughness: 0.25,
+                envMapIntensity: 1.2
             })
         };
         
-        this.material = materials[this.options.materialType] || materials.aluminum;
+        this.material = materials[this.options.materialType] || materials.chrome;
         
         // Apply to all bracket meshes
         this.bracketGroup.traverse((child) => {
@@ -357,6 +357,11 @@ class ProcessingBracket {
             if (this.options.autoRotate && this.bracketGroup) {
                 // Smooth professional rotation
                 this.bracketGroup.rotation.y += this.options.rotationSpeed;
+                
+                // Rotate ball bearings
+                if (this.ballGroup) {
+                    this.ballGroup.rotation.y -= this.options.rotationSpeed * 2;
+                }
                 
                 // Optional gentle bobbing for visual interest
                 this.bracketGroup.position.y = Math.sin(Date.now() * 0.001) * 0.02;
@@ -1076,9 +1081,9 @@ class Promptly3DApp {
         const container = document.getElementById('processing-bracket-container');
         if (container && typeof THREE !== 'undefined') {
             this.processingBracket = new ProcessingBracket(container, {
-                materialType: 'aluminum',
+                materialType: 'chrome',
                 autoRotate: true,
-                rotationSpeed: 0.008
+                rotationSpeed: 0.01
             });
             
             this.processingBracket.init();
