@@ -61,17 +61,17 @@
                 <div class="three-d-viewer-container">
                     <div id="three-d-canvas" class="three-d-canvas"></div>
                     <div class="viewer-controls">
-                        <button class="viewer-btn" id="rotate-btn">
+                        <button class="viewer-btn" id="rotate-btn" title="Rotate 3D Model">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
                             </svg>
                         </button>
-                        <button class="viewer-btn" id="zoom-in-btn">
+                        <button class="viewer-btn" id="zoom-in-btn" title="Zoom In">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
                             </svg>
                         </button>
-                        <button class="viewer-btn" id="zoom-out-btn">
+                        <button class="viewer-btn" id="zoom-out-btn" title="Zoom Out">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M8 11h6"/>
                             </svg>
@@ -90,7 +90,8 @@
                     <p class="form-subtitle">Join thousands transforming ideas into reality</p>
                     
                     <div class="form-group">
-                        <select name="user_type" id="user_type_select" class="form-select">
+                        <label for="user_type_select" class="visually-hidden">User Type</label>
+                        <select name="user_type" id="user_type_select" class="form-select" title="Select user type">
                             <option value="user">I'm a User</option>
                             <option value="vendor">I'm a Vendor</option>
                             <option value="developer">I'm a Developer</option>
