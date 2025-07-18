@@ -80,98 +80,171 @@ class ProcessingBracket {
     }
     
     createPrecisionBearing() {
-        const bearingSpecs = {
-            outerRadius: 0.6,
-            innerRadius: 0.3,
-            thickness: 0.15,
-            ballCount: 12,
-            ballRadius: 0.06
-        };
+        // Create precision gearbox assembly
+        this.createPrecisionGearbox();
+    }
+    
+    createPrecisionGearbox() {
+        const gearboxGroup = new THREE.Group();
         
-        // Outer race
-        const outerRace = new THREE.Mesh(
-            new THREE.TorusGeometry(
-                bearingSpecs.outerRadius,
-                bearingSpecs.thickness,
-                4,
-                32
-            ),
-            this.material
-        );
-        outerRace.rotation.x = Math.PI / 2;
-        outerRace.castShadow = true;
-        outerRace.receiveShadow = true;
-        
-        // Inner race
-        const innerRaceGeometry = new THREE.TorusGeometry(
-            bearingSpecs.innerRadius,
-            bearingSpecs.thickness * 0.8,
-            4,
-            32
-        );
-        const innerRace = new THREE.Mesh(innerRaceGeometry, this.material);
-        innerRace.rotation.x = Math.PI / 2;
-        innerRace.castShadow = true;
-        
-        // Ball bearings
-        const ballGroup = new THREE.Group();
-        for (let i = 0; i < bearingSpecs.ballCount; i++) {
-            const angle = (i / bearingSpecs.ballCount) * Math.PI * 2;
-            const ballRadius = (bearingSpecs.outerRadius + bearingSpecs.innerRadius) / 2;
-            
-            const ball = new THREE.Mesh(
-                new THREE.SphereGeometry(bearingSpecs.ballRadius, 16, 16),
-                new THREE.MeshStandardMaterial({
-                    color: 0xFFFFFF,
-                    metalness: 1.0,
-                    roughness: 0.05,
-                    envMapIntensity: 2.0
-                })
-            );
-            
-            ball.position.x = Math.cos(angle) * ballRadius;
-            ball.position.z = Math.sin(angle) * ballRadius;
-            ball.castShadow = true;
-            ballGroup.add(ball);
-        }
-        
-        // Cage (retainer)
-        const cageGeometry = new THREE.TorusGeometry(
-            (bearingSpecs.outerRadius + bearingSpecs.innerRadius) / 2,
-            bearingSpecs.ballRadius * 0.4,
-            6,
-            bearingSpecs.ballCount
-        );
-        const cageMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4A4A4A,
-            metalness: 0.3,
-            roughness: 0.7
+        // Main housing with cooling fins
+        const housingGeometry = new THREE.BoxGeometry(1.2, 0.8, 1);
+        // Use a lighter polished steel tone for a clean, professional look
+        const housingMaterial = new THREE.MeshStandardMaterial({
+            color: 0xA6ADB4, // Light steel grey
+            metalness: 0.9,
+            roughness: 0.2,
+            envMapIntensity: 1.5
         });
-        const cage = new THREE.Mesh(cageGeometry, cageMaterial);
-        cage.rotation.x = Math.PI / 2;
+        const housing = new THREE.Mesh(housingGeometry, housingMaterial);
+        housing.castShadow = true;
+        housing.receiveShadow = true;
         
-        // Add details - grooves
-        const grooveCount = 8;
-        for (let i = 0; i < grooveCount; i++) {
-            const angle = (i / grooveCount) * Math.PI * 2;
-            const groove = new THREE.Mesh(
-                new THREE.BoxGeometry(0.01, bearingSpecs.thickness * 1.2, 0.15),
-                new THREE.MeshStandardMaterial({
-                    color: 0x000000,
-                    metalness: 0,
-                    roughness: 1
-                })
+        // Add cooling fins
+        const finCount = 8;
+        for (let i = 0; i < finCount; i++) {
+            const fin = new THREE.Mesh(
+                new THREE.BoxGeometry(1.25, 0.02, 0.08),
+                housingMaterial
             );
-            groove.position.x = Math.cos(angle) * bearingSpecs.outerRadius;
-            groove.position.z = Math.sin(angle) * bearingSpecs.outerRadius;
-            groove.rotation.y = angle;
-            this.bracketGroup.add(groove);
+            fin.position.y = -0.3 + (i * 0.08);
+            fin.castShadow = true;
+            housing.add(fin);
         }
         
-        this.bracketGroup.add(outerRace, innerRace, ballGroup, cage);
+        // Helical gear (driver)
+        const driverGear = this.createHelicalGear(0.3, 0.15, 16, true);
+        driverGear.position.set(-0.3, 0, 0);
         
-        // Store ball group for animation
-        this.ballGroup = ballGroup;
+        // Helical gear (driven)
+        const drivenGear = this.createHelicalGear(0.5, 0.15, 24, false);
+        drivenGear.position.set(0.3, 0, 0);
+        
+        // Input shaft
+        const shaftMaterial = new THREE.MeshStandardMaterial({
+            color: 0xC0C0C0,
+            metalness: 1.0,
+            roughness: 0.1
+        });
+        const inputShaft = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 0.8),
+            shaftMaterial
+        );
+        inputShaft.rotation.z = Math.PI / 2;
+        inputShaft.position.set(-0.3, 0, 0);
+        inputShaft.castShadow = true;
+        
+        // Output shaft
+        const outputShaft = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.08, 0.08, 0.8),
+            shaftMaterial
+        );
+        outputShaft.rotation.z = Math.PI / 2;
+        outputShaft.position.set(0.3, 0, 0);
+        outputShaft.castShadow = true;
+        
+        // Mounting brackets with M8 holes
+        const bracketMaterial = new THREE.MeshStandardMaterial({
+            color: 0xB3BBC2, // Polished alloy for mounting brackets
+            metalness: 0.9,
+            roughness: 0.15
+        });
+        
+        const mountPositions = [
+            {x: -0.5, z: 0.4},
+            {x: 0.5, z: 0.4},
+            {x: -0.5, z: -0.4},
+            {x: 0.5, z: -0.4}
+        ];
+        
+        mountPositions.forEach(pos => {
+            const bracket = new THREE.Mesh(
+                new THREE.BoxGeometry(0.15, 0.1, 0.15),
+                bracketMaterial
+            );
+            bracket.position.set(pos.x, -0.45, pos.z);
+            bracket.castShadow = true;
+            
+            // M8 hole
+            const hole = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.04, 0.04, 0.12),
+                new THREE.MeshBasicMaterial({color: 0x000000})
+            );
+            hole.position.y = -0.01;
+            bracket.add(hole);
+            
+            housing.add(bracket);
+        });
+        
+        // Add glass viewport
+        const viewportGeometry = new THREE.CircleGeometry(0.25, 32);
+        const viewportMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0,
+            roughness: 0,
+            transmission: 0.95,
+            thickness: 0.5,
+            envMapIntensity: 1,
+            clearcoat: 1,
+            clearcoatRoughness: 0
+        });
+        const viewport = new THREE.Mesh(viewportGeometry, viewportMaterial);
+        viewport.position.z = 0.51;
+        housing.add(viewport);
+        
+        // Assembly
+        gearboxGroup.add(housing);
+        gearboxGroup.add(driverGear);
+        gearboxGroup.add(drivenGear);
+        gearboxGroup.add(inputShaft);
+        gearboxGroup.add(outputShaft);
+        
+        // Store components for animation
+        this.driverGear = driverGear;
+        this.drivenGear = drivenGear;
+        
+        this.bracketGroup.add(gearboxGroup);
+    }
+    
+    createHelicalGear(radius, thickness, teethCount, isDriver) {
+        const gearGroup = new THREE.Group();
+        
+        // Gear body
+        const gearMaterial = new THREE.MeshStandardMaterial({
+            color: isDriver ? 0xFFD700 : 0xC0C0C0,
+            metalness: 0.95,
+            roughness: 0.15,
+            envMapIntensity: 1.5
+        });
+        
+        const gearBody = new THREE.Mesh(
+            new THREE.CylinderGeometry(radius * 0.7, radius * 0.7, thickness),
+            gearMaterial
+        );
+        gearBody.castShadow = true;
+        gearGroup.add(gearBody);
+        
+        // Helical teeth
+        for (let i = 0; i < teethCount; i++) {
+            const angle = (i / teethCount) * Math.PI * 2;
+            const tooth = new THREE.Mesh(
+                new THREE.BoxGeometry(radius * 0.15, thickness, radius * 0.3),
+                gearMaterial
+            );
+            
+            const x = Math.cos(angle) * radius * 0.85;
+            const z = Math.sin(angle) * radius * 0.85;
+            tooth.position.set(x, 0, z);
+            tooth.rotation.y = angle + Math.PI / 2;
+            
+            // Helical angle
+            tooth.rotation.x = Math.PI / 12;
+            tooth.castShadow = true;
+            
+            gearGroup.add(tooth);
+        }
+        
+        return gearGroup;
     }
     
     createMainStructure(specs) {
@@ -356,15 +429,18 @@ class ProcessingBracket {
             
             if (this.options.autoRotate && this.bracketGroup) {
                 // Smooth professional rotation
-                this.bracketGroup.rotation.y += this.options.rotationSpeed;
+                this.bracketGroup.rotation.y += this.options.rotationSpeed * 0.5;
                 
-                // Rotate ball bearings
-                if (this.ballGroup) {
-                    this.ballGroup.rotation.y -= this.options.rotationSpeed * 2;
+                // Rotate gears
+                if (this.driverGear) {
+                    this.driverGear.rotation.y += this.options.rotationSpeed * 3;
+                }
+                if (this.drivenGear) {
+                    this.drivenGear.rotation.y -= this.options.rotationSpeed * 2;
                 }
                 
                 // Optional gentle bobbing for visual interest
-                this.bracketGroup.position.y = Math.sin(Date.now() * 0.001) * 0.02;
+                this.bracketGroup.position.y = Math.sin(Date.now() * 0.001) * 0.01;
             }
             
             this.renderer.render(this.scene, this.camera);
@@ -475,33 +551,8 @@ class Promptly3DApp {
             this.scene.add(directionalLight);
 
             // Try to load a model, but create fallback if it fails
-            if (typeof THREE.GLTFLoader !== 'undefined') {
-                const loader = new THREE.GLTFLoader();
-                loader.load('models/example.glb', 
-                    (gltf) => {
-                        this.model = gltf.scene;
-                        this.model.scale.set(1, 1, 1);
-                        this.model.position.set(0, 0, 0);
-                        this.model.castShadow = true;
-                        this.model.receiveShadow = true;
-                        this.scene.add(this.model);
-
-                        if (gltf.animations && gltf.animations.length) {
-                            this.animationMixer = new THREE.AnimationMixer(this.model);
-                            const action = this.animationMixer.clipAction(gltf.animations[0]);
-                            action.play();
-                        }
-                    },
-                    undefined,
-                    () => {
-                        // Model failed to load, create fallback
-                        this.createFallback3DModel();
-                    }
-                );
-            } else {
-                // GLTFLoader not available, create fallback
-                this.createFallback3DModel();
-            }
+            // Skip GLB loading and use fallback directly to avoid 404 errors
+            this.createFallback3DModel();
 
             // Setup viewer controls
             this.setupViewerControls();
@@ -1189,30 +1240,30 @@ class Promptly3DApp {
             this.scene.remove(this.model);
         }
         
-        // Create professional precision bearing assembly as per PRP requirements
+        // Create professional aerospace bracket assembly as per PRP requirements
         this.model = new THREE.Group();
         
-        // Professional stainless steel material (PRP requirement)
-        const steelMaterial = new THREE.MeshStandardMaterial({
-            color: 0xE8E8E8,
-            metalness: 0.95,
-            roughness: 0.1,
-            envMapIntensity: 1.0
+        // Professional anodized aluminum material (PRP requirement)
+        const anodizedAluminum = new THREE.MeshStandardMaterial({
+            color: 0x1A1A2E, // Dark blue anodized finish
+            metalness: 0.7,
+            roughness: 0.3,
+            envMapIntensity: 1.2
         });
         
-        // Ball bearing material - slightly darker steel
-        const ballMaterial = new THREE.MeshStandardMaterial({
+        // Machined aluminum for accents
+        const machinedAluminum = new THREE.MeshStandardMaterial({
             color: 0xC0C0C0,
             metalness: 0.9,
             roughness: 0.2,
-            envMapIntensity: 0.8
+            envMapIntensity: 1.0
         });
         
-        // Create precision bearing assembly
-        this.createPrecisionBearing(steelMaterial, ballMaterial);
+        // Create aerospace bracket assembly
+        this.createAerospaceBracket(anodizedAluminum, machinedAluminum);
         
         // Position and scale for optimal viewing
-        this.model.scale.set(1.2, 1.2, 1.2);
+        this.model.scale.set(1.0, 1.0, 1.0);
         this.model.position.set(0, 0, 0);
         this.scene.add(this.model);
         
@@ -1232,69 +1283,227 @@ class Promptly3DApp {
         this.autoRotateSpeed = 0.002;
     }
     
-    createPrecisionBearing(steelMaterial, ballMaterial) {
-        // Outer race - industrial grade specifications (optimized)
-        const outerRaceGeometry = new THREE.TorusGeometry(1.6, 0.25, 12, 48);
-        const outerRace = new THREE.Mesh(outerRaceGeometry, steelMaterial);
-        outerRace.castShadow = true;
-        outerRace.receiveShadow = true;
-        this.model.add(outerRace);
+    createAerospaceBracket(mainMaterial, accentMaterial) {
+        // Main bracket body with complex L-shaped geometry
+        const bracketGroup = new THREE.Group();
         
-        // Inner race - precision machined (optimized)
-        const innerRaceGeometry = new THREE.TorusGeometry(1.0, 0.2, 12, 48);
-        const innerRace = new THREE.Mesh(innerRaceGeometry, steelMaterial);
-        innerRace.castShadow = true;
-        innerRace.receiveShadow = true;
-        this.model.add(innerRace);
+        // Create main L-shaped structure
+        const baseWidth = 3.0;
+        const baseHeight = 0.4;
+        const baseDepth = 2.0;
+        const verticalHeight = 2.5;
+        const verticalWidth = 0.4;
         
-        // Ball bearings - 12 precision steel balls (optimized for performance)
-        const ballCount = 12;
-        const ballRadius = 0.15;
-        const ballGeometry = new THREE.SphereGeometry(ballRadius, 16, 16); // Reduced segments for 60fps performance
-        const pitchCircleRadius = 1.3;
+        // Base plate with weight reduction cutouts
+        const basePlate = new THREE.Group();
         
-        for (let i = 0; i < ballCount; i++) {
-            const angle = (i / ballCount) * Math.PI * 2;
-            const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+        // Main base geometry
+        const baseGeometry = new THREE.BoxGeometry(baseWidth, baseHeight, baseDepth);
+        const base = new THREE.Mesh(baseGeometry, mainMaterial);
+        base.position.set(0, 0, 0);
+        base.castShadow = true;
+        base.receiveShadow = true;
+        basePlate.add(base);
+        
+        // Weight reduction cutouts in base
+        const cutoutWidth = 0.8;
+        const cutoutDepth = 1.2;
+        const cutoutGeometry = new THREE.BoxGeometry(cutoutWidth, baseHeight + 0.1, cutoutDepth);
+        
+        [-0.8, 0.8].forEach(xPos => {
+            const cutout = new THREE.Mesh(cutoutGeometry, mainMaterial);
+            cutout.position.set(xPos, 0, 0);
+            // Using CSG-like approach by creating darker areas to simulate cutouts
+            const cutoutOverlay = new THREE.Mesh(cutoutGeometry, new THREE.MeshStandardMaterial({
+                color: 0x000000,
+                metalness: 0.9,
+                roughness: 0.5,
+                opacity: 0.3,
+                transparent: true
+            }));
+            cutoutOverlay.position.copy(cutout.position);
+            basePlate.add(cutoutOverlay);
+        });
+        
+        bracketGroup.add(basePlate);
+        
+        // Vertical support with reinforcement ribs
+        const verticalSupport = new THREE.Group();
+        
+        // Main vertical piece
+        const verticalGeometry = new THREE.BoxGeometry(verticalWidth, verticalHeight, baseDepth);
+        const vertical = new THREE.Mesh(verticalGeometry, mainMaterial);
+        vertical.position.set(-baseWidth/2 + verticalWidth/2, verticalHeight/2 + baseHeight/2, 0);
+        vertical.castShadow = true;
+        vertical.receiveShadow = true;
+        verticalSupport.add(vertical);
+        
+        // Reinforcement ribs
+        const ribCount = 3;
+        for (let i = 0; i < ribCount; i++) {
+            const ribHeight = 0.8 - i * 0.2;
+            const ribLength = 1.0 - i * 0.2;
             
-            ball.position.set(
-                Math.cos(angle) * pitchCircleRadius,
-                0,
-                Math.sin(angle) * pitchCircleRadius
+            // Create triangular rib geometry
+            const ribShape = new THREE.Shape();
+            ribShape.moveTo(0, 0);
+            ribShape.lineTo(ribLength, 0);
+            ribShape.lineTo(0, ribHeight);
+            ribShape.closePath();
+            
+            const ribGeometry = new THREE.ExtrudeGeometry(ribShape, {
+                depth: 0.15,
+                bevelEnabled: true,
+                bevelThickness: 0.02,
+                bevelSize: 0.02,
+                bevelSegments: 2
+            });
+            
+            const rib = new THREE.Mesh(ribGeometry, mainMaterial);
+            rib.rotation.y = Math.PI / 2;
+            rib.position.set(
+                -baseWidth/2 + verticalWidth,
+                baseHeight/2 + 0.1,
+                -baseDepth/2 + 0.4 + i * 0.6
             );
-            
-            ball.castShadow = true;
-            ball.receiveShadow = true;
-            this.model.add(ball);
+            rib.castShadow = true;
+            verticalSupport.add(rib);
         }
         
-        // Bearing cage/separator (optimized)
-        const cageGeometry = new THREE.TorusGeometry(1.3, 0.05, 8, 32);
-        const cageMaterial = new THREE.MeshStandardMaterial({
-            color: 0xA0A0A0,
-            metalness: 0.7,
-            roughness: 0.3
+        bracketGroup.add(verticalSupport);
+        
+        // Precision mounting holes with inserts
+        this.addMountingHoles(bracketGroup, basePlate, vertical, accentMaterial);
+        
+        // Corner gusset for structural strength
+        const gussetRadius = 0.6;
+        const gussetGeometry = new THREE.CylinderGeometry(gussetRadius, gussetRadius, 0.3, 32, 1, false, 0, Math.PI/2);
+        const gusset = new THREE.Mesh(gussetGeometry, mainMaterial);
+        gusset.rotation.x = Math.PI / 2;
+        gusset.rotation.z = Math.PI;
+        gusset.position.set(-baseWidth/2 + verticalWidth/2 + gussetRadius/2, baseHeight/2 + gussetRadius/2, 0);
+        gusset.castShadow = true;
+        bracketGroup.add(gusset);
+        
+        // Add surface details and chamfers
+        this.addBracketDetails(bracketGroup, mainMaterial, accentMaterial);
+        
+        // Add surface texturing for realism
+        this.addSurfaceDetails(mainMaterial);
+        
+        // Apply realistic rotation for better viewing angle
+        bracketGroup.rotation.x = -0.3;
+        bracketGroup.rotation.y = 0.5;
+        
+        this.model.add(bracketGroup);
+    }
+    
+    addMountingHoles(bracketGroup, basePlate, vertical, accentMaterial) {
+        // M8 mounting holes in base
+        const holeRadius = 0.4;
+        const holeHeight = 0.5;
+        const insertHeight = 0.3;
+        
+        // Base mounting holes pattern
+        const baseHolePositions = [
+            { x: -1.2, z: -0.7 },
+            { x: -1.2, z: 0.7 },
+            { x: 1.2, z: -0.7 },
+            { x: 1.2, z: 0.7 }
+        ];
+        
+        baseHolePositions.forEach(pos => {
+            // Hole geometry
+            const holeGeometry = new THREE.CylinderGeometry(holeRadius, holeRadius, holeHeight, 32);
+            const hole = new THREE.Mesh(holeGeometry, new THREE.MeshStandardMaterial({
+                color: 0x000000,
+                metalness: 0.9,
+                roughness: 0.8
+            }));
+            hole.position.set(pos.x, 0, pos.z);
+            hole.castShadow = true;
+            bracketGroup.add(hole);
+            
+            // Threaded insert
+            const insertGeometry = new THREE.CylinderGeometry(holeRadius * 0.9, holeRadius * 0.9, insertHeight, 32);
+            const insert = new THREE.Mesh(insertGeometry, accentMaterial);
+            insert.position.set(pos.x, -0.05, pos.z);
+            bracketGroup.add(insert);
+            
+            // Countersink detail
+            const countersinkGeometry = new THREE.CylinderGeometry(holeRadius * 1.4, holeRadius, 0.1, 32);
+            const countersink = new THREE.Mesh(countersinkGeometry, accentMaterial);
+            countersink.position.set(pos.x, 0.15, pos.z);
+            bracketGroup.add(countersink);
         });
-        const cage = new THREE.Mesh(cageGeometry, cageMaterial);
-        cage.castShadow = true;
-        this.model.add(cage);
         
-        // Inner bore detail
-        const boreGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.15, 32);
-        const bore = new THREE.Mesh(boreGeometry, steelMaterial);
-        bore.rotation.x = Math.PI / 2;
-        bore.castShadow = true;
-        this.model.add(bore);
+        // Vertical mounting holes
+        const verticalHolePositions = [
+            { y: 0.8, z: -0.6 },
+            { y: 0.8, z: 0.6 },
+            { y: 1.8, z: 0 }
+        ];
         
-        // Outer shoulder detail
-        const shoulderGeometry = new THREE.CylinderGeometry(2.0, 2.0, 0.1, 64);
-        const shoulder = new THREE.Mesh(shoulderGeometry, steelMaterial);
-        shoulder.rotation.x = Math.PI / 2;
-        shoulder.castShadow = true;
-        this.model.add(shoulder);
+        verticalHolePositions.forEach(pos => {
+            const holeGeometry = new THREE.CylinderGeometry(holeRadius * 0.8, holeRadius * 0.8, 0.5, 32);
+            const hole = new THREE.Mesh(holeGeometry, new THREE.MeshStandardMaterial({
+                color: 0x000000,
+                metalness: 0.9,
+                roughness: 0.8
+            }));
+            hole.rotation.z = Math.PI / 2;
+            hole.position.set(-1.3, pos.y + 0.2, pos.z);
+            bracketGroup.add(hole);
+        });
+    }
+    
+    addBracketDetails(bracketGroup, mainMaterial, accentMaterial) {
+        // Add machined surface texture lines
+        const lineCount = 20;
+        const lineGeometry = new THREE.BoxGeometry(2.8, 0.002, 0.01);
         
-        // Add subtle surface texturing for realism
-        this.addSurfaceDetails(steelMaterial);
+        for (let i = 0; i < lineCount; i++) {
+            const line = new THREE.Mesh(lineGeometry, new THREE.MeshStandardMaterial({
+                color: 0x0A0A0F,
+                metalness: 0.9,
+                roughness: 0.1,
+                opacity: 0.3,
+                transparent: true
+            }));
+            line.position.set(0, 0.201, -0.95 + i * 0.1);
+            bracketGroup.add(line);
+        }
+        
+        // Part number engraving
+        const partNumberGeometry = new THREE.BoxGeometry(0.8, 0.003, 0.05);
+        const partNumber = new THREE.Mesh(partNumberGeometry, accentMaterial);
+        partNumber.position.set(0.8, 0.202, 0.8);
+        bracketGroup.add(partNumber);
+        
+        // Add edge chamfers using thin boxes
+        const chamferSize = 0.05;
+        const chamferMaterial = new THREE.MeshStandardMaterial({
+            color: mainMaterial.color,
+            metalness: mainMaterial.metalness * 0.8,
+            roughness: mainMaterial.roughness * 1.2
+        });
+        
+        // Chamfer edges
+        const edges = [
+            { pos: [1.5, 0.2, 1], rot: [0, 0, Math.PI/4], scale: [0.05, 2, 0.05] },
+            { pos: [-1.5, 0.2, 1], rot: [0, 0, -Math.PI/4], scale: [0.05, 2, 0.05] },
+            { pos: [1.5, 0.2, -1], rot: [0, 0, Math.PI/4], scale: [0.05, 2, 0.05] },
+            { pos: [-1.5, 0.2, -1], rot: [0, 0, -Math.PI/4], scale: [0.05, 2, 0.05] }
+        ];
+        
+        edges.forEach(edge => {
+            const chamferGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const chamfer = new THREE.Mesh(chamferGeometry, chamferMaterial);
+            chamfer.position.set(...edge.pos);
+            chamfer.rotation.set(...edge.rot);
+            chamfer.scale.set(...edge.scale);
+            bracketGroup.add(chamfer);
+        });
     }
     
     setupProfessionalLighting() {
@@ -1882,20 +2091,68 @@ class InterfaceController {
     }
     
     init() {
+        // Performance monitoring
+        this.performanceMetrics = {
+            startTime: performance.now(),
+            loadTime: 0,
+            renderTime: 0,
+            interactionTime: 0
+        };
+        
         this.setupNavigation();
         this.initializeDemos();
         this.setupInteractions();
         this.startAnimations();
+        this.optimizePerformance();
+        
+        // Track load completion
+        window.addEventListener('load', () => {
+            this.performanceMetrics.loadTime = performance.now() - this.performanceMetrics.startTime;
+            console.log(`Page load time: ${this.performanceMetrics.loadTime.toFixed(2)}ms`);
+        });
     }
     
     setupNavigation() {
         const navButtons = document.querySelectorAll('.nav-btn');
         const features = document.querySelectorAll('.interface-feature-enhanced');
         
-        navButtons.forEach(btn => {
+        navButtons.forEach((btn, index) => {
+            // Mouse click handler
             btn.addEventListener('click', (e) => {
                 const feature = e.target.dataset.feature;
                 this.switchFeature(feature);
+                this.announceFeatureChange(feature);
+            });
+            
+            // Keyboard navigation handler
+            btn.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'Enter':
+                    case ' ':
+                        e.preventDefault();
+                        const feature = e.target.dataset.feature;
+                        this.switchFeature(feature);
+                        this.announceFeatureChange(feature);
+                        break;
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        this.focusNextTab(index);
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        this.focusPrevTab(index);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        this.focusTab(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        this.focusTab(navButtons.length - 1);
+                        break;
+                }
             });
         });
     }
@@ -1903,23 +2160,200 @@ class InterfaceController {
     switchFeature(feature) {
         if (feature === this.currentFeature) return;
         
-        // Update navigation
-        document.querySelector('.nav-btn.active').classList.remove('active');
-        document.querySelector(`[data-feature="${feature}"]`).classList.add('active');
+        // Update navigation ARIA attributes
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.setAttribute('aria-selected', 'false');
+            btn.classList.remove('active');
+        });
         
-        // Update feature display
-        document.querySelector('.interface-feature-enhanced.active').classList.remove('active');
-        document.querySelector(`.interface-feature-enhanced[data-feature="${feature}"]`).classList.add('active');
+        const activeBtn = document.querySelector(`[data-feature="${feature}"]`);
+        activeBtn.setAttribute('aria-selected', 'true');
+        activeBtn.classList.add('active');
+        
+        // Update feature display and ARIA attributes
+        document.querySelectorAll('.interface-feature-enhanced').forEach(panel => {
+            panel.classList.remove('active');
+            panel.setAttribute('aria-hidden', 'true');
+        });
+        
+        const activePanel = document.querySelector(`.interface-feature-enhanced[data-feature="${feature}"]`);
+        activePanel.classList.add('active');
+        activePanel.setAttribute('aria-hidden', 'false');
         
         this.currentFeature = feature;
         this.initializeFeatureDemo(feature);
     }
     
+    // Keyboard navigation helper methods
+    focusNextTab(currentIndex) {
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const nextIndex = (currentIndex + 1) % navButtons.length;
+        this.focusTab(nextIndex);
+    }
+    
+    focusPrevTab(currentIndex) {
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const prevIndex = currentIndex === 0 ? navButtons.length - 1 : currentIndex - 1;
+        this.focusTab(prevIndex);
+    }
+    
+    focusTab(index) {
+        const navButtons = document.querySelectorAll('.nav-btn');
+        if (navButtons[index]) {
+            navButtons[index].focus();
+        }
+    }
+    
+    // Screen reader announcements
+    announceFeatureChange(feature) {
+        const featureNames = {
+            manipulation: '3D Manipulation',
+            collaboration: 'Real-time Collaboration',
+            input: 'Multi-Modal Input',
+            workflow: 'Manufacturing Workflow Integration'
+        };
+        
+        const announcement = `${featureNames[feature]} tab selected. Use arrow keys to navigate between tabs.`;
+        this.announceToScreenReader(announcement);
+    }
+    
+    announceToScreenReader(message) {
+        // Create or update live region for screen reader announcements
+        let liveRegion = document.getElementById('sr-live-region');
+        if (!liveRegion) {
+            liveRegion = document.createElement('div');
+            liveRegion.id = 'sr-live-region';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.setAttribute('aria-atomic', 'true');
+            liveRegion.className = 'visually-hidden';
+            document.body.appendChild(liveRegion);
+        }
+        
+        // Clear and set new message
+        liveRegion.textContent = '';
+        setTimeout(() => {
+            liveRegion.textContent = message;
+        }, 100);
+    }
+    
+    // Performance optimization methods
+    optimizePerformance() {
+        // Debounce resize events
+        this.debounceResize();
+        
+        // Optimize animation frames
+        this.optimizeAnimations();
+        
+        // Memory management
+        this.setupMemoryManagement();
+        
+        // Intersection Observer for lazy loading
+        this.setupLazyLoading();
+    }
+    
+    debounceResize() {
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.handleResize();
+            }, 250);
+        });
+    }
+    
+    handleResize() {
+        // Optimize canvas sizes on resize
+        const canvases = document.querySelectorAll('canvas');
+        canvases.forEach(canvas => {
+            if (canvas.parentElement) {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                canvas.style.width = rect.width + 'px';
+                canvas.style.height = rect.height + 'px';
+            }
+        });
+    }
+    
+    optimizeAnimations() {
+        // Use requestAnimationFrame for smooth animations
+        this.animationFrameId = null;
+        this.lastFrameTime = 0;
+        this.targetFPS = 60;
+        this.frameInterval = 1000 / this.targetFPS;
+    }
+    
+    setupMemoryManagement() {
+        // Cleanup inactive demos to free memory
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    // Pause animations for off-screen elements
+                    const canvas = entry.target.querySelector('canvas');
+                    if (canvas && canvas.animationContext) {
+                        canvas.animationContext.pause = true;
+                    }
+                } else {
+                    // Resume animations for visible elements
+                    const canvas = entry.target.querySelector('canvas');
+                    if (canvas && canvas.animationContext) {
+                        canvas.animationContext.pause = false;
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.interface-feature-enhanced').forEach(el => {
+            observer.observe(el);
+        });
+    }
+    
+    setupLazyLoading() {
+        // Lazy load heavy content when tabs become visible
+        const tabObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const feature = entry.target.dataset.feature;
+                    if (feature && !entry.target.dataset.loaded) {
+                        this.loadFeatureContent(feature);
+                        entry.target.dataset.loaded = 'true';
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.interface-feature-enhanced').forEach(el => {
+            tabObserver.observe(el);
+        });
+    }
+    
+    loadFeatureContent(feature) {
+        // Load heavy content only when needed
+        const startTime = performance.now();
+        
+        switch(feature) {
+            case 'manipulation':
+                this.initializeManipulationDemo();
+                break;
+            case 'collaboration':
+                this.initializeCollaborationDemo();
+                break;
+            case 'input':
+                this.initializeInputDemo();
+                break;
+            case 'workflow':
+                this.initializeWorkflowDemo();
+                break;
+        }
+        
+        const loadTime = performance.now() - startTime;
+        console.log(`${feature} demo loaded in ${loadTime.toFixed(2)}ms`);
+    }
+    
     initializeDemos() {
-        this.demos.manipulation = new ManipulationDemo();
-        this.demos.collaboration = new CollaborationDemo();
-        this.demos.input = new InputDemo();
-        this.demos.workflow = new WorkflowDemo();
+        // Commented out - Professional Interface section removed
+        // this.demos.manipulation = new ManipulationDemo();
+        // this.demos.collaboration = new CollaborationDemo();
+        // this.demos.input = new InputDemo();
+        // this.demos.workflow = new WorkflowDemo();
     }
     
     initializeFeatureDemo(feature) {
